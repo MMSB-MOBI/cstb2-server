@@ -11,6 +11,21 @@ export class ComputeSpecificInput {
   })
   gni: string[];
 
+  @MinLength(1, {
+    each: true,
+  })
+  pam: string;
+
+  @MinLength(1, {
+    each: true,
+  })
+  sgrna_length: string;
+
+  @MinLength(1, {
+    each: true,
+  })
+  email: string;
+
 }
 
 export class ComputeSpecificResults {
