@@ -10,9 +10,9 @@
         socket.emit('events', { test: 'test' });
 
         console.log("GOGO");
-        socket.emit('computeSpecific', { gi: ['E.coli'], gni:['citronbacter'] });
-        socket.on(  'computeSpecific', (response) => {
-            console.log("computeSpecific", response);
+        socket.emit('allGenomes', { gi: ['E.coli'], gni:['citronbacter'] });
+        socket.on(  'allGenomes', (response) => {
+            console.log("allGenomes", response);
         });
 
         socket.emit('identity', 0, response =>

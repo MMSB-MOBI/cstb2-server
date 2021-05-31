@@ -1,6 +1,6 @@
 import { IsDefined,  IsInt, MinLength } from 'class-validator';
 
-export class ComputeSpecificInput {
+export class AllGenomesInput {
   @MinLength(1, {
     each: true,
   })
@@ -11,9 +11,24 @@ export class ComputeSpecificInput {
   })
   gni: string[];
 
+  @MinLength(1, {
+    each: true,
+  })
+  pam: string;
+
+  @MinLength(1, {
+    each: true,
+  })
+  sgrna_length: string;
+
+  @MinLength(1, {
+    each: true,
+  })
+  email: string;
+
 }
 
-export class ComputeSpecificResults {
+export class AllGenomesResults {
     @IsDefined()
     @IsInt()
     score:number;
