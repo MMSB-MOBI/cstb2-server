@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AllGenomesInput, AllGenomesResults } from './dto/compute.dto';
+import { AllGenomesInput, SpecificGeneInput, AllGenomesResults } from './dto/compute.dto';
 
 @Injectable()
 export class ComputeService {
@@ -7,10 +7,17 @@ export class ComputeService {
   //   return 'Lets compute!';
   // }
 
-  specificCompare(data: AllGenomesInput):Promise<AllGenomesResults>{
+  specificGeneCompare(data: SpecificGeneInput):Promise<AllGenomesResults>{
       const dummy:AllGenomesResults = { "score" : 10 };
       return new Promise( (res, rej) => {
         setTimeout(()=> { console.log("Resolving", dummy); res(dummy); }, 2500 );
       });       
   }
+
+  allGenomesCompare(data: AllGenomesInput):Promise<AllGenomesResults>{
+    const dummy:AllGenomesResults = { "score" : 10 };
+    return new Promise( (res, rej) => {
+      setTimeout(()=> { console.log("Resolving", dummy); res(dummy); }, 2500 );
+    });       
+}
 }

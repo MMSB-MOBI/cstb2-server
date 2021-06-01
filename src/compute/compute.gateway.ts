@@ -9,7 +9,7 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server } from 'socket.io';
 
-import { AllGenomesInput, AllGenomesResults } from './dto/compute.dto';
+import { AllGenomesInput, SpecificGeneInput, AllGenomesResults } from './dto/compute.dto';
 import { ComputeService } from './compute.service';
 
 @WebSocketGateway()
@@ -19,11 +19,20 @@ export class ComputeGateway {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('submittedRequest')
-  async allGenomes(@MessageBody() data: AllGenomesInput): Promise<AllGenomesResults> // Promise<WsResponse<AllGenomesResults>>
+  @SubscribeMessage('specificGeneRequest')
+  async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<AllGenomesResults> // Promise<WsResponse<AllGenomesResults>>
   {
     console.log('Getting data:', data);
-    const results = await this.computeService.specificCompare(data);
+    const results = await this.computeService.specificGeneCompare(data);
+    console.log("Returning");
+    return results; // return { event: 'specificGene', data : results };
+  }
+
+  @SubscribeMessage('allGenomesRequest')
+  async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<AllGenomesResults> // Promise<WsResponse<AllGenomesResults>>
+  {
+    console.log('Getting data:', data);
+    const results = await this.computeService.allGenomesCompare(data);
     console.log("Returning");
     return results; // return { event: 'allGenomes', data : results };
   }
