@@ -1,11 +1,11 @@
-import { IsDefined,  IsInt, MinLength } from 'class-validator';
+import { IsDefined, IsInt, MinLength } from 'class-validator';
 
 export class AllGenomesInput {
   @MinLength(1, {
     each: true,
   })
   gi: string[];
-  
+
   @MinLength(1, {
     each: true,
   })
@@ -26,6 +26,11 @@ export class AllGenomesInput {
   })
   email: string;
 
+  // @MinLength(1, {
+  //   each: true,
+  // })
+  // blabla: string;
+
 }
 
 export class SpecificGeneInput {
@@ -33,7 +38,7 @@ export class SpecificGeneInput {
     each: true,
   })
   gi: string[];
-  
+
   @MinLength(1, {
     each: true,
   })
@@ -64,10 +69,55 @@ export class SpecificGeneInput {
   })
   seq: string;
 
+  // @MinLength(1, {
+  //   each: true,
+  // })
+  // blabla: string;
+
 }
 
 export class AllGenomesResults {
-    @IsDefined()
-    @IsInt()
-    score:number;
+  @IsDefined()
+  gi: string;
+
+  @IsDefined()
+  not_in: string;
+
+  @IsDefined()
+  number_hits: string;
+
+  @IsDefined()
+  number_treated_hits: number;
+
+  // @IsDefined()
+  // data:
+
+  // @IsDefined()
+  // data_card
+
+  // @IsDefined()
+  // tag
+
+  // @IsDefined()
+  // size
+
+  // @IsDefined()
+  // fasta_metadata
+
+  // @IsDefined()
+  // gene
+}
+
+export class SpecificGeneResults {
+  @IsDefined()
+  gi: string;
+
+  @IsDefined()
+  not_in: string;
+
+  @IsDefined()
+  number_hits: string;
+
+  @IsDefined()
+  number_treated_hits: number;
 }

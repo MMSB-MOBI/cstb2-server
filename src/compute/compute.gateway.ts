@@ -9,8 +9,9 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Server } from 'socket.io';
 
-import { AllGenomesInput, SpecificGeneInput, AllGenomesResults } from './dto/compute.dto';
+import { AllGenomesInput, SpecificGeneInput, AllGenomesResults, SpecificGeneResults } from './dto/compute.dto';
 import { ComputeService } from './compute.service';
+import { UsePipes, ValidationPipe } from '@nestjs/common'
 
 @WebSocketGateway()
 export class ComputeGateway {
@@ -19,31 +20,26 @@ export class ComputeGateway {
   @WebSocketServer()
   server: Server;
 
+  @UsePipes(new ValidationPipe())
   @SubscribeMessage('specificGeneRequest')
-  async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<AllGenomesResults> // Promise<WsResponse<AllGenomesResults>>
+  async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<WsResponse<SpecificGeneResults>>
   {
     console.log('Getting data:', data);
     const results = await this.computeService.specificGeneCompare(data);
-    console.log("Returning");
-    return results; // return { event: 'specificGene', data : results };
+    console.log("Returning specificGeneRequest");
+    return { event: 'specificGeneResults', data : results };
+    // return results
   }
 
+  @UsePipes(new ValidationPipe())
   @SubscribeMessage('allGenomesRequest')
-  async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<AllGenomesResults> // Promise<WsResponse<AllGenomesResults>>
+  async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<WsResponse<AllGenomesResults>>
   {
     console.log('Getting data:', data);
     const results = await this.computeService.allGenomesCompare(data);
-    console.log("Returning");
-    return results; // return { event: 'allGenomes', data : results };
+    console.log("Returning allGenomesRequest");
+    return { event: 'allGenomesResults', data : results };
   }
-
-  // @SubscribeMessage('allGenomes')
-  // async allGenomes(@MessageBody() data: any): Promise<WsResponse<AllGenomesResults>>{ // Observable<WsResponse<number>>  
-  //     console.log("Getting data", data);
-  //     const results = await this.computeService.specificCompare(data);
-  //     console.log("Returning");
-  //     return { event: 'allGenomes', data : results };
-  // }
 
   // @SubscribeMessage('events')
   // findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
