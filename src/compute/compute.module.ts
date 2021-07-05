@@ -5,4 +5,4 @@ import { ComputeService } from './compute.service';
 @Module({
   providers: [ComputeGateway, ComputeService],
 })
-export class ComputeModule {}
+export class ComputeModule { }
