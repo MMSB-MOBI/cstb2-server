@@ -7,7 +7,7 @@ export class ConfigService {
     private readonly port = 5984;
     private readonly nanoHandler?: any;
     constructor() {
-        console.log("INVOKED");
+        // console.log("INVOKED");
         // this.nanoHandler = require(....)
     };
 

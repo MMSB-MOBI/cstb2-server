@@ -5,7 +5,7 @@ import { ComputeModule2 } from "./compute2/compute2.module"
 import { DevModule2 } from "./dev2/dev2.module"
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule } from './database/database.module';
 
 @Module({
   // imports: [DevModule, ComputeModule,

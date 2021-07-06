@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
-import { ConfigService } from '../config/config.service';
+import { ConfigService } from '../database/database.service';
 import { ImportedTree } from './dto/dev2.dto';
 
 @Injectable()
