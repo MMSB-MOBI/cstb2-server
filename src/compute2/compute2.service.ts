@@ -1,21 +1,37 @@
 import { Injectable } from "@nestjs/common";
 import { AllGenomesInput, SpecificGeneInput, AllGenomesResults, SpecificGeneResults } from './dto/compute2.dto';
 import { validate } from 'class-validator';
-import jsonfile = require('jsonfile');
-import utils from "util";
 import { join } from 'path';
 import { readFile } from 'fs/promises';
 import { plainToClass } from 'class-transformer';
+import * as jobManagerClient from "ms-jobmanager";
+const script = './test/hello.sh'
 
-let jobManager = require('ms-jobmanager');
-// const program = require("commander");
-// let param = jsonfile.readFileSync(program.conf);
+function asPromise(script: any, exportVar: Record<string, string>): Promise<any> {
+    return new Promise((res, rej) => {
+        const j = jobManagerClient.push({ script, exportVar });
+        j.on("completed", (stdout: any, stderr: any) => {
+            const chunks: Uint8Array[] = [];
+            console.log("STDOUT");
+            stdout.on('data', (chunk: Uint8Array) => chunks.push(chunk))
+            stdout.on('end', () => res(Buffer.concat(chunks).toString('utf8')));
+        })
+    });
+}
 
 @Injectable()
 export class ComputeService2 {
 
     async allGenomesCompare(data: AllGenomesInput): Promise<AllGenomesResults> {
-        // // new version
+        // new version
+        const exportVar = { "titi": "28" };
+        const port = 1234;
+        const TCPip = "127.0.0.1";
+
+        await jobManagerClient.start({ port, TCPip })
+
+        asPromise(script, exportVar)
+
         // let jobOpt = {
         //     "exportVar": {
         //         "rfg": param.dataFolder,
@@ -56,12 +72,11 @@ export class ComputeService2 {
     }
 
     async specificGeneCompare(data: SpecificGeneInput): Promise<SpecificGeneResults> {
-    
-        
-        // // new version
+        // new version
+
         // let jobOpt = {
         //     "exportVar" : {
-		//         "blastdb" : param.blastdb,
+        //         "blastdb" : param.blastdb,
         //         "rfg" : param.dataFolder,
         //         "gi" : data.gi.join('&'),
         //         "gni" : data.gni.join('&'),
@@ -98,19 +113,3 @@ export class ComputeService2 {
         return results
     }
 }
-
-// import * as jobManagerClient from "ms-jobmanager";
-// const script = './test/hello.sh'
-// await jobManagerClient.start({port, TCPip})
-
-// function asPromise(script:any, exportVar:Record<string, string>):Promise<any> {
-//     return new Promise((res, rej) => {
-//         const j = jobManagerClient.push({script, exportVar});
-//             j.on("completed", (stdout:any, stderr:any)=> {
-//             const chunks:Uint8Array[] = [];
-//             console.log("STDOUT");
-//             stdout.on('data', (chunk:Uint8Array) => chunks.push(chunk))
-//             stdout.on('end', () => res( Buffer.concat(chunks).toString('utf8') ));
-//             })
-//         });
-// }
