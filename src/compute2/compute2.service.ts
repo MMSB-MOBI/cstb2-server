@@ -8,8 +8,8 @@ import { readFile } from 'fs/promises';
 import { plainToClass } from 'class-transformer';
 
 let jobManager = require('ms-jobmanager');
-const program = require("commander");
-let param = jsonfile.readFileSync(program.conf);
+// const program = require("commander");
+// let param = jsonfile.readFileSync(program.conf);
 
 @Injectable()
 export class ComputeService2 {
@@ -56,6 +56,8 @@ export class ComputeService2 {
     }
 
     async specificGeneCompare(data: SpecificGeneInput): Promise<SpecificGeneResults> {
+    
+        
         // // new version
         // let jobOpt = {
         //     "exportVar" : {
@@ -96,3 +98,19 @@ export class ComputeService2 {
         return results
     }
 }
+
+// import * as jobManagerClient from "ms-jobmanager";
+// const script = './test/hello.sh'
+// await jobManagerClient.start({port, TCPip})
+
+// function asPromise(script:any, exportVar:Record<string, string>):Promise<any> {
+//     return new Promise((res, rej) => {
+//         const j = jobManagerClient.push({script, exportVar});
+//             j.on("completed", (stdout:any, stderr:any)=> {
+//             const chunks:Uint8Array[] = [];
+//             console.log("STDOUT");
+//             stdout.on('data', (chunk:Uint8Array) => chunks.push(chunk))
+//             stdout.on('end', () => res( Buffer.concat(chunks).toString('utf8') ));
+//             })
+//         });
+// }
