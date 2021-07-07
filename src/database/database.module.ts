@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { ConfigService } from './database.service';
+import { DatabaseService } from './database.service';
 
 import jsonfile = require('jsonfile');
 const program = require("commander");
@@ -7,11 +7,11 @@ const program = require("commander");
 @Global()
 @Module({
     //controllers: [ConfigController],
-    providers: [ConfigService],
-    exports: [ConfigService],
+    providers: [DatabaseService],
+    exports: [DatabaseService],
 })
 
-export class ConfigModule {
+export class DatabaseModule {
     getNano() {
         const nano = require('nano')('http://admin:admin@localhost:5984');
         return nano }

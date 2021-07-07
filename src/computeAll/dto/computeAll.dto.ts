@@ -1,5 +1,7 @@
 import { IsDefined, IsInt, MinLength } from 'class-validator';
 
+export {jobOptProxyClient} from "ms-jobmanager"
+
 export class AllGenomesInput {
   @MinLength(1, {
     each: true,
@@ -89,23 +91,23 @@ export class AllGenomesResults {
   @IsDefined()
   number_treated_hits: number;
 
-  // @IsDefined()
-  // data:
+  @IsDefined()
+  data
 
-  // @IsDefined()
-  // data_card
+  @IsDefined()
+  data_card
 
-  // @IsDefined()
-  // tag
+  @IsDefined()
+  tag
 
-  // @IsDefined()
-  // size
+  @IsDefined()
+  size
 
-  // @IsDefined()
-  // fasta_metadata
+  @IsDefined()
+  fasta_metadata
 
-  // @IsDefined()
-  // gene
+  @IsDefined()
+  gene
 }
 
 export class SpecificGeneResults {

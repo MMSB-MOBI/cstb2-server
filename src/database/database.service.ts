@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ImportedTree } from '../dev2/dto/dev2.dto';
 
 @Injectable()
-export class ConfigService {
+export class DatabaseService {
     private readonly url = "http://admin:admin@localhost:5984";
     private readonly port = 5984;
     private readonly nanoHandler?: any;

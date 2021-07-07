@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { validate } from 'class-validator';
-import { ConfigService } from '../database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { ImportedTree } from './dto/dev2.dto';
 
 @Injectable()
 export class DevService2 {
-    constructor(private readonly configService: ConfigService) { }
+    constructor(private readonly configService: DatabaseService) { }
 
     getTree(): Promise<ImportedTree> {
         const doc = "maxi_tree";
