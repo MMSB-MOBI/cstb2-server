@@ -1,15 +1,17 @@
-http:
+job-manager:
   host: 'localhost'
-  port: 8080
+  port: 1234
 
 db:
-  postgres:
+  couchDB:
     url: 'localhost'
-    port: 5432
-    database: 'yaml-db'
+    port: 5984
+    database: 'tree'
+    user: 'admin'
+    password: 'admin'
 
   sqlite:
     database: 'sqlite.db'
 
-adress: "127.0.0.1"
+address: "127.0.0.1"
 port: 1234

@@ -1,10 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
-import { DevService2 } from './dev2.service';
-import { ImportedTree } from './dto/dev2.dto';
+import { TaxonomyTreeService } from './taxonomyTree.service';
+import { ImportedTree } from './dto/taxonomyTree.dto';
 
 @Controller()
-export class DevController2 {
-  constructor(private readonly dev2Service: DevService2) { }
+export class TaxonomyTreeController {
+  constructor(private readonly taxonomyService: TaxonomyTreeService) { }
 
   @Get('/dev/tree')
   getTree(): Promise<ImportedTree> {
@@ -18,6 +18,6 @@ export class DevController2 {
     //     }
     // })()
 
-    return this.dev2Service.getTree();
+    return this.taxonomyService.getTree();
   }
 }

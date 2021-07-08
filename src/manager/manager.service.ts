@@ -9,10 +9,8 @@ export class ManagerService {
     private _connect: boolean = false;
 
     constructor(private configService: ConfigService /* port: number, TCPip: string */) {
-        console.log("instance created job manager");
         this.port = configService.get("port");
-        this.TCPip = configService.get("adress");
-        console.log(configService.get("http"));        
+        this.TCPip = configService.get("address");  
     }
 
     async start() {
@@ -22,13 +20,11 @@ export class ManagerService {
             }, 500)
         })
         try {
-            console.log("je démarre");
             await jobManagerClient.start({ port: this.port, TCPip: this.TCPip })
             this._connect = true
-            console.log("je suis démarré")
             return true
         } catch (e) {
-            console.error(`Unable to connect ${e}`);
+            console.error(`Unable to connect: ${e}`);
             return false
         }
     }

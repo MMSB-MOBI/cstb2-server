@@ -1,21 +1,11 @@
-import { Global, Module } from "@nestjs/common";
-import { ConfigModule } from "../config/config.module";
+import { Module } from "@nestjs/common";
 import { ManagerService } from './manager.service'
+import { ConfigModule } from '@nestjs/config';
 
-// const jobManagerFactory = {
-//     provide: 'JOBMANAGER',
-//     useFactory: (configModule: ConfigModule) => {
-//         return new ManagerService(/* configModule.get('port'), configModule.get('TCPip') */);
-//     },
-//     inject: [/* ConfigModule */],
-// };
-
-// @Global()
 @Module({
-    //controllers: [ManagerController],
     imports: [ConfigModule],
-    providers: [ManagerService /* jobManagerFactory */],
-    // exports: ['JOBMANAGER'],
+    providers: [ManagerService],
+    exports: [ManagerService],
 })
 
 export class ManagerModule { }
