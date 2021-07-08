@@ -1,13 +1,13 @@
-// import config from './config_parameters';
+import config from './config_parameters';
 import { Module } from '@nestjs/common';
 
 // @Module({
-//   providers: [
-//     {
-//       provide: 'CONFIG',
-//       useValue: config,
-//     },
-//   ],
+//     providers: [
+//         {
+//             provide: 'CONFIG',
+//             useValue: config,
+//         },
+//     ],
 // })
 
 @Module({

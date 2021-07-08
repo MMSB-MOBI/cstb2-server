@@ -1,15 +1,5 @@
 import { IsDefined, MinLength } from 'class-validator';
-
-interface Node {
-    text: string,
-    children?: Node[],
-    genome_uuid?: string,
-}
-
-class Node{
-    @IsDefined()
-    text: string;
-}
+import { Node } from '../interfaces/dev2.interface'
 
 export class ImportedTree {
   @IsDefined()
@@ -20,7 +10,7 @@ export class ImportedTree {
 
   @IsDefined()
   date: string;
-  
+
   @IsDefined()
   tree: Node;
 }

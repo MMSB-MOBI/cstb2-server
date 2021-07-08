@@ -4,7 +4,7 @@ import { ManagerService } from './manager.service'
 
 const jobManagerFactory = {
     provide: 'JOBMANAGER',
-    useFactory: (/* configModule: ConfigModule */) => {
+    useFactory: (configModule: ConfigModule) => {
         return new ManagerService(1234, "127.0.0.1" /* configModule.get('port'), configModule.get('TCPip') */);
     },
     inject: [/* ConfigModule */],

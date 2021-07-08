@@ -7,7 +7,7 @@ export class ManagerService {
     private TCPip: string;
     private _connect: boolean = false;
 
-    constructor(port, TCPip) {
+    constructor(port: number, TCPip: string) {
         console.log("instance created job manager");
         this.port = port;
         this.TCPip = TCPip;
@@ -32,12 +32,11 @@ export class ManagerService {
     }
 
     async push(jobOpt: jobManagerClient.jobOptProxyClient): Promise<any> { // Guillaume doit typer l'objet job
-        console.log('toto')
         if (!this._connect) await this.start();
 
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
-            let _buffer = "";
+            // let _buffer = "";
             job.on("completed", (stdout: any, stderr: any) => {
                 const chunks: Uint8Array[] = [];
                 const errchunks: Uint8Array[] = [];

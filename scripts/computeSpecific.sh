@@ -1,3 +1,4 @@
+VAR1=$(cat <<EOF
 {
     "gi": "Escherichia coli IAI1&Escherichia coli HS&Escherichia coli MP1&Escherichia coli Nissle&Escherichia coli DSM 30083 = JCM 1649 = ATCC 11775&Escherichia coli O127:H6 str. E2348/69&Escherichia coli O157:H7 str. Sakai&Escherichia coli str. K-12 substr. MG1655",
     "not_in": "",
@@ -19812,3 +19813,7 @@
         }
     }
 }
+EOF
+)
+
+echo $VAR1
