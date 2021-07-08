@@ -2,10 +2,11 @@ import { Injectable, Inject } from "@nestjs/common";
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { SpecificGeneInput, SpecificGeneResults, jobOptProxyClient } from './dto/computeSpecific.dto';
+import { ManagerService } from "../manager/manager.service";
 
 @Injectable()
 export class ComputeSpecificService {
-    constructor(@Inject('JOBMANAGER') private managerService) { }
+    constructor(/* @Inject('JOBMANAGER') */ private managerService: ManagerService) { }
 
     async specificGeneCompare(data: SpecificGeneInput) /*: Promise<SpecificGeneResults> */ {
         const jobOpt: jobOptProxyClient = {

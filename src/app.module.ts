@@ -8,16 +8,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { DatabaseModule } from './database/database.module';
 import { ManagerModule } from './manager/manager.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
 
 @Module({
   // imports: [DevModule, ComputeModule,
   imports: [DevModule2, ComputeSpecificModule, ComputeAllModule, DatabaseModule, ManagerModule,
-   ServeStaticModule.forRoot({
+    ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../..', 'static'),
       exclude: ['/dev*', '/compute*'],
     }),
+    ConfigModule.forRoot({
+      load: [configuration]
+    })
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

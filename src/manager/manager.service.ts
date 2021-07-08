@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as jobManagerClient from "ms-jobmanager";
+import { ConfigService } from "@nestjs/config"
 
 @Injectable()
 export class ManagerService {
@@ -7,10 +8,11 @@ export class ManagerService {
     private TCPip: string;
     private _connect: boolean = false;
 
-    constructor(port: number, TCPip: string) {
+    constructor(private configService: ConfigService /* port: number, TCPip: string */) {
         console.log("instance created job manager");
-        this.port = port;
-        this.TCPip = TCPip;
+        this.port = configService.get("port");
+        this.TCPip = configService.get("adress");
+        console.log(configService.get("http"));        
     }
 
     async start() {

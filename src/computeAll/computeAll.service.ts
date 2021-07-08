@@ -2,10 +2,11 @@ import { Injectable, Inject } from "@nestjs/common";
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { AllGenomesInput, AllGenomesResults, jobOptProxyClient } from './dto/computeAll.dto';
+import { ManagerService } from "../manager/manager.service";
 
 @Injectable()
 export class ComputeAllService {
-    constructor(@Inject('JOBMANAGER') private managerService) { }
+    constructor(/* @Inject('JOBMANAGER') */ private managerService: ManagerService) { }
 
     async allGenomesCompare(data: AllGenomesInput) /* : Promise<AllGenomesResults> */ {
         console.log("all genome compare");
