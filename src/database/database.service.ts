@@ -29,6 +29,8 @@ export class DatabaseService {
         // const _url: string = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
         const _url = 'https://admin:admin@localhost:5984'
         const nano = require('nano')(_url);
+        console.log("request tree");
+        
         return new Promise((res, rej) => {
             nano.request({ db, doc }, (err, data) => {
                 if (err) { rej(err); return }
