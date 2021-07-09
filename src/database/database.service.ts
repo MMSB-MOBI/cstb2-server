@@ -7,7 +7,7 @@ export class DatabaseService {
     private user: string;
     private password: string;
     private port: number;
-    private address: string;
+    private host: string;
     private database: string;
     private url: string;
     private readonly nanoHandler?: any;
@@ -16,9 +16,9 @@ export class DatabaseService {
         this.user = configService.get("db.couchDB.user");
         this.password = configService.get("db.couchDB.password");
         this.port = configService.get("db.couchDB.port");
-        this.address = configService.get("db.couchDB.address");
+        this.host = configService.get("db.couchDB.host");
         this.database = configService.get("db.couchDB.database");
-        this.url = `http://${this.user}:${this.password}@${this.address}:${this.port}`;
+        this.url = `http://${this.user}:${this.password}@${this.host}:${this.port}`;
         this.nanoHandler = require('nano')(this.url);
     };
 

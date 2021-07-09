@@ -4,7 +4,7 @@ job-manager:
 
 db:
   couchDB:
-    address: 'localhost'
+    host: 'localhost'
     port: 5984
     database: 'tree'
     user: 'admin'
@@ -12,6 +12,33 @@ db:
 
   sqlite:
     database: 'sqlite.db'
+
+allGenomes:
+  exportVar:
+    rfg: ''
+    MOTIF_BROKER_ENDPOINT: ''
+    NAME_TAXON: 'taxon_db'
+    NAME_GENOME: 'genome_db'
+    COUCH_ENDPOINT: ''
+
+  modules: ["crispr-prod/3.0.0"]
+  jobProfile: "crispr-dev"
+  script: "/home/cassandre/Desktop/cstb2-server/scripts/computeAll.sh"
+  sysSettingsKey: "crispr-dev"
+
+specificGene:
+  exportVar:
+    blastdb: ''
+    rfg: ''
+    MOTIF_BROKER_ENDPOINT: ''
+    NAME_TAXON: ''
+    NAME_GENOME: ''
+    COUCH_ENDPOINT: ''
+
+  modules: ["crispr-prod/3.0.0", "blast+"]
+  jobProfile: "crispr-dev"
+  script: "/home/cassandre/Desktop/cstb2-server/scripts/computeSpecific.sh"
+  sysSettingsKey: "crispr-dev"
 
 address: "127.0.0.1"
 port: 1234
