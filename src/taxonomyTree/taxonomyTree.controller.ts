@@ -8,7 +8,7 @@ export class TaxonomyTreeController {
 
   @Get('/dev/tree')
   getTree(): Promise<ImportedTree> {
-
+    
     // (async () => {
     //     try {
     //         const result = await this.dev2Service.getTree();
