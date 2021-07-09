@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { DevModule } from './dev/dev.module';
-import { ComputeModule } from './compute/compute.module';
 import { ComputeSpecificModule } from "./computeSpecific/computeSpecific.module"
 import { ComputeAllModule } from "./computeAll/computeAll.module"
 import { TaxonomyTreeModule } from "./taxonomyTree/taxonomyTree.module"
@@ -12,7 +10,6 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 
 @Module({
-  // imports: [DevModule, ComputeModule,
   imports: [TaxonomyTreeModule, ComputeSpecificModule, ComputeAllModule, DatabaseModule, ManagerModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../..', 'static'),

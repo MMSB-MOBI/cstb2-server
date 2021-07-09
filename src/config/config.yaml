@@ -1,29 +1,37 @@
 job-manager:
-  host: 'localhost'
+  address: "127.0.0.1"
   port: 1234
+  scriptRoot: '/home/cassandre/Desktop/cstb2-server/scripts'
 
 db:
   couchDB:
     host: 'localhost'
     port: 5984
-    database: 'tree'
     user: 'admin'
     password: 'admin'
 
-  sqlite:
-    database: 'sqlite.db'
+    maxi_tree:
+      database: 'tree'
+
+    taxon:
+      name: 'taxon_db'
+
+    genome:
+      name: 'genome_db'
+
+  motif-broker:
+    host: 'localhost'
+    port: 0000
 
 allGenomes:
   exportVar:
     rfg: ''
     MOTIF_BROKER_ENDPOINT: ''
-    NAME_TAXON: 'taxon_db'
-    NAME_GENOME: 'genome_db'
     COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0"]
   jobProfile: "crispr-dev"
-  script: "/home/cassandre/Desktop/cstb2-server/scripts/computeAll.sh"
+  script: "computeAll.sh"
   sysSettingsKey: "crispr-dev"
 
 specificGene:
@@ -31,15 +39,9 @@ specificGene:
     blastdb: ''
     rfg: ''
     MOTIF_BROKER_ENDPOINT: ''
-    NAME_TAXON: ''
-    NAME_GENOME: ''
     COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0", "blast+"]
   jobProfile: "crispr-dev"
-  script: "/home/cassandre/Desktop/cstb2-server/scripts/computeSpecific.sh"
+  script: "computeSpecific.sh"
   sysSettingsKey: "crispr-dev"
-
-address: "127.0.0.1"
-port: 1234
-scripts: 'src/scripts'

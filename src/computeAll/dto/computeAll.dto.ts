@@ -1,7 +1,5 @@
 import { IsDefined, MinLength } from 'class-validator';
 
-export {jobOptProxyClient} from "ms-jobmanager"
-
 export class AllGenomesInput {
   @MinLength(1, {
     each: true,

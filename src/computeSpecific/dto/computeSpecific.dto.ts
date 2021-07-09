@@ -1,7 +1,5 @@
 import { IsDefined, MinLength } from 'class-validator';
 
-export {jobOptProxyClient} from "ms-jobmanager"
-
 export class SpecificGeneInput {
   @MinLength(1, {
     each: true,

@@ -21,6 +21,8 @@ export class ComputeSpecificGateway {
     @UsePipes(new ValidationPipe())
     @SubscribeMessage('specificGeneRequest')
     async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<WsResponse<SpecificGeneResults>> {
+        console.log('Getting data:', data);
+
         console.log(`socket:submitSpecificGene\n${utils.format(data)}`);
 
         console.log(`included genomes:\n${utils.format(data.gi)}`);
@@ -35,7 +37,7 @@ export class ComputeSpecificGateway {
             console.log(results);
             return { event: 'specificGeneResults', data: results };
         } catch (e) {
-            console.log("error", e);
+            console.log("Error", e);
         }
     }
 }

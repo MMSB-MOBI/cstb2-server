@@ -1,35 +1,43 @@
 import { Injectable } from "@nestjs/common";
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { AllGenomesInput, AllGenomesResults, jobOptProxyClient } from './dto/computeAll.dto';
+import { AllGenomesInput, AllGenomesResults } from './dto/computeAll.dto';
 import { ManagerService } from "../manager/manager.service";
+import { jobOptProxyClient } from '../manager/dto/manager.dto'
 import { ConfigService } from "@nestjs/config"
 
 @Injectable()
 export class ComputeAllService {
     private rfg: string
     private MOTIF_BROKER_ENDPOINT: string
-    private NAME_TAXON: string
-    private NAME_GENOME: string
+    private taxon_db: string
+    private genome_db: string
     private COUCH_ENDPOINT: string
     private script: string
-    // private modules: string
-    // private jobProfile: string
-    // private sysSettingsKey: string
+    private configToken = 'allGenomes'
+    private modules: string[]
+    private jobProfile: string
+    private sysSettingsKey: string
 
+    // variables should be validated
     constructor(
         private managerService: ManagerService,
         private configService: ConfigService) {
-            this.rfg = configService.get("allGenomes.exportVar.rfg");
-            this.MOTIF_BROKER_ENDPOINT = configService.get("allGenomes.exportVar.MOTIF_BROKER_ENDPOINT");
-            this.NAME_TAXON = configService.get("allGenomes.exportVar.NAME_TAXON");
-            this.NAME_GENOME = configService.get("allGenomes.exportVar.NAME_GENOME");
-            this.COUCH_ENDPOINT = configService.get("allGenomes.exportVar.COUCH_ENDPOINT");
-            this.script = configService.get("allGenomes.script");
-            // this.modules = configService.get("allGenomes.modules");
-            // this.jobProfile = configService.get("allGenomes.jobProfile");
-            // this.sysSettingsKey = configService.get("allGenomes.sysSettingsKey");
-        }
+        const { rfg, MOTIF_BROKER_ENDPOINT, COUCH_ENDPOINT } = configService.get(`${this.configToken}.exportVar`);
+        console.log(configService.get(`${this.configToken}.exportVar`));
+
+        this.rfg = rfg;
+        this.MOTIF_BROKER_ENDPOINT = MOTIF_BROKER_ENDPOINT;
+        this.COUCH_ENDPOINT = COUCH_ENDPOINT;
+        this.taxon_db = configService.get("db.taxon.name");
+        this.genome_db = configService.get("db.genome.name");
+
+        const { modules, jobProfile, sysSettingsKey, script } = configService.get(`${this.configToken}`);
+        this.script = configService.get('job-manager.scriptRoot') + '/' + script;
+        this.modules = modules;
+        this.jobProfile = jobProfile;
+        this.sysSettingsKey = sysSettingsKey;
+    }
 
     async allGenomesCompare(data: AllGenomesInput) /* : Promise<AllGenomesResults> */ {
         const jobOpt: jobOptProxyClient = {
@@ -40,16 +48,16 @@ export class ComputeAllService {
                 "pam": data.pam,
                 "sl": data.sgrna_length,
                 "MOTIF_BROKER_ENDPOINT": this.MOTIF_BROKER_ENDPOINT,
-                "NAME_TAXON": this.NAME_TAXON,
-                "NAME_GENOME": this.NAME_GENOME,
+                "taxon_db": this.taxon_db,
+                "genome_db": this.genome_db,
                 "COUCH_ENDPOINT": this.COUCH_ENDPOINT,
             },
-            // "modules": this.modules,
-            // "jobProfile": this.jobProfile,
+            "modules": this.modules,
+            "jobProfile": this.jobProfile,
             // "script": "/Users/cheritier/Desktop/cstb2-server/scripts/computeAll.sh",
             // "script": `${param.coreScriptsFolder}/crispr_workflow.sh`,
             "script": this.script,
-            // "sysSettingsKey": this.sysSettingsKey
+            "sysSettingsKey": this.sysSettingsKey
         };
 
         // try {

@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { SpecificGeneInput, SpecificGeneResults, jobOptProxyClient } from './dto/computeSpecific.dto';
+import { SpecificGeneInput, SpecificGeneResults } from './dto/computeSpecific.dto';
+import { jobOptProxyClient } from '../manager/dto/manager.dto'
 import { ManagerService } from "../manager/manager.service";
 import { ConfigService } from "@nestjs/config"
 
@@ -10,26 +11,34 @@ export class ComputeSpecificService {
     private blastdb: string
     private rfg: string
     private MOTIF_BROKER_ENDPOINT: string
-    private NAME_TAXON: string
-    private NAME_GENOME: string
+    private taxon_db: string
+    private genome_db: string
     private COUCH_ENDPOINT: string
     private script: string
-    // private modules: string
-    // private jobProfile: string
-    // private sysSettingsKey: string
+    private configToken = 'specificGene'
+    private modules: string[]
+    private jobProfile: string
+    private sysSettingsKey: string
 
+    // variables should be validated
     constructor(
         private managerService: ManagerService,
         private configService: ConfigService) {
-        this.blastdb = configService.get("specificGene.exportVar.blastdb")
-        this.rfg = configService.get("specificGene.exportVar.rfg")
-        this.MOTIF_BROKER_ENDPOINT = configService.get("specificGene.exportVar.MOTIF_BROKER_ENDPOINT");
-        this.NAME_TAXON = configService.get("specificGene.exportVar.NAME_TAXON");
-        this.NAME_GENOME = configService.get("specificGene.exportVar.NAME_GENOME");
-        this.COUCH_ENDPOINT = configService.get("specificGene.exportVar.COUCH_ENDPOINT");
-        // this.modules = configService.get("specificGene.modules");
-        // this.jobProfile = configService.get("specificGene.jobProfile");
-        // this.sysSettingsKey = configService.get("specificGene.sysSettingsKey");
+        const { blastdb, rfg, MOTIF_BROKER_ENDPOINT, COUCH_ENDPOINT } = configService.get(`${this.configToken}.exportVar`);
+        console.log(configService.get(`${this.configToken}.exportVar`));
+
+        this.blastdb = blastdb;
+        this.rfg = rfg;
+        this.MOTIF_BROKER_ENDPOINT = MOTIF_BROKER_ENDPOINT;
+        this.COUCH_ENDPOINT = COUCH_ENDPOINT;
+        this.taxon_db = configService.get("db.taxon.name");
+        this.genome_db = configService.get("db.genome.name");
+
+        const { modules, jobProfile, sysSettingsKey, script } = configService.get(`${this.configToken}`);
+        this.script = configService.get('job-manager.scriptRoot') + '/' + script;
+        this.modules = modules;
+        this.jobProfile = jobProfile;
+        this.sysSettingsKey = sysSettingsKey;
     }
 
     async specificGeneCompare(data: SpecificGeneInput) /*: Promise<SpecificGeneResults> */ {
@@ -42,19 +51,19 @@ export class ComputeSpecificService {
                 "pam": data.pam,
                 "sl": data.sgrna_length,
                 "MOTIF_BROKER_ENDPOINT": this.MOTIF_BROKER_ENDPOINT,
-                "NAME_TAXON": this.NAME_TAXON,
-                "NAME_GENOME": this.NAME_GENOME,
+                "taxon_db": this.taxon_db,
+                "genome_db": this.genome_db,
                 "seq": data.seq,
                 // "n": data.n,
                 "pid": data.pid,
                 "COUCH_ENDPOINT": this.COUCH_ENDPOINT,
             },
-            // "modules": this.modules,
-            // "jobProfile": this.jobProfile,
+            "modules": this.modules,
+            "jobProfile": this.jobProfile,
             // "script": "/Users/cheritier/Desktop/cstb2-server/scripts/computeSpecific.sh",
             // "script": `${param.coreScriptsFolder}/crispr_workflow.sh`,
             "script": this.script,
-            // "sysSettingsKey": this.sysSettingsKey
+            "sysSettingsKey": this.sysSettingsKey
         };
 
         // try {

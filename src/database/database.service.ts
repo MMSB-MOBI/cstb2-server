@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ImportedTree } from '../taxonomyTree/dto/taxonomyTree.dto';
 import { ConfigService } from "@nestjs/config"
+// import { inspect } from 'util'
 
 @Injectable()
 export class DatabaseService {
@@ -20,6 +21,7 @@ export class DatabaseService {
         this.database = configService.get("db.couchDB.database");
         this.url = `http://${this.user}:${this.password}@${this.host}:${this.port}`;
         this.nanoHandler = require('nano')(this.url);
+        // console.log(inspect(this.nanoHandler));
     };
 
     requestTree(db: string, doc: string): Promise<ImportedTree> {

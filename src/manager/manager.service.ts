@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import * as jobManagerClient from "ms-jobmanager";
+// import { jobOptProxyClient } from './dto/manager.dto';
+import * as jobManagerClient from 'ms-jobmanager'
 import { ConfigService } from "@nestjs/config"
 
 @Injectable()
@@ -8,10 +9,14 @@ export class ManagerService {
     private TCPip: string;
     private _connect: boolean = false;
 
-    constructor(private configService: ConfigService /* port: number, TCPip: string */) {
-        this.port = configService.get("port");
-        this.TCPip = configService.get("address");  
+    constructor(private configService: ConfigService) {
+        this.port = configService.get('job-manager.port')
+        this.TCPip = configService.get("job-manager.address");  
     }
+
+    // generateJobOpt(exportVar: Record<string, any>): jobOptProxyClient {
+    //     return
+    // }
 
     async start() {
         if (this._connect) return new Promise((res, rej) => {
@@ -34,7 +39,6 @@ export class ManagerService {
 
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
-            // let _buffer = "";
             job.on("completed", (stdout: any, stderr: any) => {
                 const chunks: Uint8Array[] = [];
                 const errchunks: Uint8Array[] = [];
