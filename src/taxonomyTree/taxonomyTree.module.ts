@@ -7,4 +7,4 @@ import { TaxonomyTreeService } from './taxonomyTree.service';
   controllers: [TaxonomyTreeController],
   providers: [TaxonomyTreeService],
 })
-export class TaxonomyModule {}
+export class TaxonomyTreeModule {}
