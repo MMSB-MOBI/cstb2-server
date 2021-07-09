@@ -7,37 +7,38 @@ export class DatabaseService {
     private user: string;
     private password: string;
     private port: number;
+    private local: string;
     private url: string;
     private address: string;
     private database: string;
     private readonly nanoHandler?: any;
 
     constructor(private configService: ConfigService) {
-        this.user = configService.get("user");
-        this.password = configService.get("password");
-        this.port = configService.get("db.port");
-        this.url = configService.get("url");
-        this.address = configService.get("address");
-        this.database = configService.get("database");
+        console.log("config service", configService.get("db.user"));
 
-        this.url = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
-        this.nanoHandler = require('nano')(this.url);
-        console.log("nano handler", this.nanoHandler);
+        this.user = configService.get("db.user");
+        this.password = configService.get("db.password");
+        this.port = configService.get("db.port");
+        this.local = configService.get("url");
+        this.address = configService.get("address");
+        this.database = configService.get("db.database");
+
+        // this.url = 'https://admin:admin@localhost:5984'
+        this.url = `http://${this.user}:${this.password}@${this.local}:${this.port}`;
+        this.nanoHandler = require('nano')(/* "https://admin:admin@localhost:5984" */ this.url);
     };
 
     requestTree(db: string, doc: string): Promise<ImportedTree> {
-        const _url: string = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
-        // const _url = 'https://admin:admin@localhost:5984'
 
-        console.log("url", _url);
-        const nano = require('nano')(_url);
+        console.log("url", this.url);
 
         return new Promise((res, rej) => {
-            nano.request({ db, doc }, (err, data) => {
-                console.log("request couch db");
+            this.nanoHandler.request({ db, doc }, (err, data) => {
                 if (err) { rej(err); return }
                 res(data)
             })
+            console.log("request couch db");
+
         })
     }
 }
