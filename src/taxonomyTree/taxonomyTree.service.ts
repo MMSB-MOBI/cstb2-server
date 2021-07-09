@@ -12,7 +12,6 @@ export class TaxonomyTreeService {
         const doc = "maxi_tree";
         const db = "tree";
         const tree = await this.databaseService.requestTree(db, doc);
-        console.log("tree", tree);
         
         // const errors = await validate(tree);
         // if (errors.length > 0) {

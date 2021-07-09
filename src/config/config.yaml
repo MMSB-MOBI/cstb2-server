@@ -4,7 +4,7 @@ job-manager:
 
 db:
   couchDB:
-    local: 'localhost'
+    address: 'localhost'
     port: 5984
     database: 'tree'
     user: 'admin'
