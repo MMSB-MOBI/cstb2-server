@@ -19,19 +19,20 @@ export class DatabaseService {
         this.url = configService.get("url");
         this.address = configService.get("address");
         this.database = configService.get("database");
-        this.url = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
 
+        this.url = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
         this.nanoHandler = require('nano')(this.url);
+        console.log("nano handler", this.nanoHandler);
     };
 
     requestTree(db: string, doc: string): Promise<ImportedTree> {
-        // const _url: string = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
-        const _url = 'https://admin:admin@localhost:5984'
+        const _url: string = `http://${this.user}:${this.password}@${this.url}:${this.port}`;
+        // const _url = 'https://admin:admin@localhost:5984'
+
+        console.log("url", _url);
         const nano = require('nano')(_url);
 
         return new Promise((res, rej) => {
-            console.log("before request");
-
             nano.request({ db, doc }, (err, data) => {
                 console.log("request couch db");
                 if (err) { rej(err); return }
