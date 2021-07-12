@@ -1,11 +1,12 @@
-// import { ConfigService } from "@nestjs/config";
-// import { ComputeService } from "../computeVirtual/computeVirtual.service";
+import { ConfigService } from "@nestjs/config";
+import { ComputeService } from "../computeVirtual/computeVirtual.service";
 
-// export class ComputeAllService extends ComputeService {
-//     constructor(configService: ConfigService) {
-//         super(configService) // inherit
-//         console.log(this.rfg);
-//     }
-// }
+export class ComputeAllService extends ComputeService {
+    constructor(ConfigServie) {
+        super(ConfigService); // inherit
+        console.log(this.rfg);
+        
+    }
+}
 
-// const a = new ComputeAllService(configService);
+// const a = new ComputeAllService();
