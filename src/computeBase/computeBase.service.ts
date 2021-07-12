@@ -1,4 +1,4 @@
-import { ConfigService } from "@nestjs/config"
+import { ConfigModule, ConfigService } from "@nestjs/config"
 import { jobOptProxyClient } from "../manager/dto/manager.dto"
 import { AllGenomesInput } from '../computeAll/dto/computeAll.dto';
 
@@ -28,7 +28,7 @@ export abstract class ComputeBaseService {
         this.modules = modules;
         this.jobProfile = jobProfile;
         this.sysSettingsKey = sysSettingsKey;
-        this.script = script;
+        this.script = configService.get("job-manager.scriptRoot") + "/" + script;
     }
 
     generateBaseJobOpt(data: AllGenomesInput): jobOptProxyClient {

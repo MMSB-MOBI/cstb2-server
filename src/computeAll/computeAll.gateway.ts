@@ -27,7 +27,7 @@ export class ComputeAllGateway {
             console.log(results);
             return { event: 'allGenomesResults', data: results };
         } catch (e) {
-            console.log("Error", e);
+            console.log("==Error==", e);
         }
     }
 }

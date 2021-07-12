@@ -29,7 +29,7 @@ export class ManagerService {
             this._connect = true
             return true
         } catch (e) {
-            console.error(`Unable to connect: ${e}`);
+            console.error(`Unable to connect at ${this.TCPip}:${this.port} : ${e}`)
             return false
         }
     }
@@ -39,6 +39,9 @@ export class ManagerService {
 
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
+            job.on("scriptError", (message: string) => {
+                rej(message)
+            });
             job.on("completed", (stdout: any, stderr: any) => {
                 const chunks: Uint8Array[] = [];
                 const errchunks: Uint8Array[] = [];
