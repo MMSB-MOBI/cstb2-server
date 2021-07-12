@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ManagerModule } from '../manager/manager.module';
-
 import { ComputeAllService } from './computeAll.service';
 import { ComputeAllGateway } from './computeAll.gateway';
-import { ComputeBaseService } from '../computeBase/computeBase.service';
+import { ManagerModule } from '../../manager/manager.module';
+import { ConfigModule } from '@nestjs/config';
+import { ComputeBaseService } from '../../computeBase/computeBase.service';
 
 @Module({
     imports: [ManagerModule, ConfigModule],
@@ -12,7 +11,7 @@ import { ComputeBaseService } from '../computeBase/computeBase.service';
         ComputeAllService,
         {
             provide: ComputeBaseService,
-            useClass: ComputeAllService,
+            useClass: ComputeAllService, // Extends ComputeService
         }
     ],
 })
