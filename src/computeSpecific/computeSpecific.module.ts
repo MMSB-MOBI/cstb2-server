@@ -1,19 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { ManagerModule } from '../manager/manager.module';
-
 import { ComputeSpecificService } from './computeSpecific.service';
 import { ComputeSpecificGateway } from './computeSpecific.gateway';
-import { ComputeBaseService } from '../computeBase/computeBase.service';
+import { ManagerModule } from '../manager/manager.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [ManagerModule, ConfigModule],
-    providers: [ComputeSpecificGateway,
-        ComputeSpecificService,
-        {
-            provide: ComputeBaseService,
-            useClass: ComputeSpecificService,
-        }
-    ],
+    providers: [ComputeSpecificGateway, ComputeSpecificService],
 })
 export class ComputeSpecificModule { }
