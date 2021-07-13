@@ -11,7 +11,7 @@ export class ManagerService {
 
     constructor(private configService: ConfigService) {
         this.port = configService.get('job-manager.port')
-        this.TCPip = configService.get("job-manager.address");  
+        this.TCPip = configService.get("job-manager.address");
     }
 
     // generateJobOpt(exportVar: Record<string, any>): jobOptProxyClient {
@@ -39,9 +39,37 @@ export class ManagerService {
 
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
+
+            // manage errors
             job.on("scriptError", (message: string) => {
+                console.log("script error");
                 rej(message)
             });
+            job.on("lostJob", () => {
+                console.log("lost job");
+                rej()
+            });
+            job.on("fsFatalError", (message: string, error: string) => {
+                console.log("fs fatal error");
+                rej(error)
+            });
+            job.on("scriptSetPermissionError", (err) => {
+                console.log("script set permission error");
+                rej(err)
+            });
+            job.on("scriptWriteError", (err) => {
+                console.log("script write error");
+                rej(err)
+            });
+            job.on("scriptReadError", (err) => {
+                console.log("script read error");
+                rej(err)
+            });
+            job.on("inputError", (err) => {
+                console.log("input error");
+                rej(err)
+            });
+
             job.on("completed", (stdout: any, stderr: any) => {
                 const chunks: Uint8Array[] = [];
                 const errchunks: Uint8Array[] = [];
@@ -50,10 +78,12 @@ export class ManagerService {
                 stdout.on('end', () => {
                     const _ = Buffer.concat(chunks).toString('utf8');
                     try {
-                        const data = JSON.parse(_)
+                        const data = JSON.parse(_) // catch: res.status(500).json({ error: e.message, stack: e.stack });
                         res(data);
                     } catch (e) {
                         rej(e);
+                        // socket.emit('workflowError', "Can't parse sbatch output");
+                        // return;
                     }
                 });
                 stderr.on('data', (chunk: Uint8Array) => errchunks.push(chunk))

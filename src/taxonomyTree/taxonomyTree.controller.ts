@@ -17,16 +17,10 @@ export class TaxonomyTreeController {
 
   @Get('/dev/tree') // this.route
   getTree(): Promise<ImportedTree> {
-    
-    // (async () => {
-    //     try {
-    //         const result = await this.dev2Service.getTree();
-    //         return result // string and not promise<string>
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // })()
-
-    return this.taxonomyService.getTree();
+    try {
+      return this.taxonomyService.getTree();
+    } catch (err) {
+      console.log(err);      
+    }
   }
 }

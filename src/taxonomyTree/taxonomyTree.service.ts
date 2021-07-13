@@ -8,16 +8,18 @@ export class TaxonomyTreeService {
     constructor(private readonly databaseService: DatabaseService) { }
 
     async getTree(): Promise<ImportedTree> {
-
         const doc = "maxi_tree";
         const db = "tree";
-        const tree = await this.databaseService.requestTree(db, doc);
+        try {
+            const tree = await this.databaseService.requestTree(db, doc);
+            return tree
+        } catch (err) {
+            console.log(err);            
+        }
         
         // const errors = await validate(tree);
         // if (errors.length > 0) {
         //     console.log('Validation failed: ', errors);
-        // }
-
-        return tree
+        // }        
     }
 }
