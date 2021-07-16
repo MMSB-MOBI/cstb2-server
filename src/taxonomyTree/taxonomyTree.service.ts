@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { ImportedTree } from './dto/taxonomyTree.dto';
+// import { NotFoundException } from './interfaces/taxonomyTree.interface'
 // import { validate } from 'class-validator';
 
 @Injectable()
@@ -11,12 +12,19 @@ export class TaxonomyTreeService {
         const doc = "maxi_tree";
         const db = "tree";
         try {
-            const tree = await this.databaseService.requestTree(db, doc);
-            return tree
+            var tree = await this.databaseService.requestTree(db, doc);
         } catch (err) {
-            console.log(err);            
+            try {
+                if (err.scope = 'socket') {
+                    throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+                    // throw new NotFoundException();
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-        
+        return tree;
+
         // const errors = await validate(tree);
         // if (errors.length > 0) {
         //     console.log('Validation failed: ', errors);

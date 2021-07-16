@@ -15,12 +15,12 @@ export class TaxonomyTreeController {
       this.route = `/dev/${this.database}`
     }
 
-  @Get('/dev/tree') // this.route
+  @Get('/dev/tree')
   getTree(): Promise<ImportedTree> {
     try {
       return this.taxonomyService.getTree();
-    } catch (err) {
-      console.log(err);      
+    } catch (error) {
+      console.log(error);      
     }
   }
 }

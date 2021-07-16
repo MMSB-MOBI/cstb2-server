@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ImportedTree } from '../taxonomyTree/dto/taxonomyTree.dto';
 import { ConfigService } from "@nestjs/config"
+import { NotFoundException } from '../taxonomyTree/interfaces/taxonomyTree.interface'
 
 @Injectable()
 export class DatabaseService {
@@ -25,8 +26,8 @@ export class DatabaseService {
     requestTree(db: string, doc: string): Promise<ImportedTree> {
         return new Promise((res, rej) => {
             this.nanoHandler.request({ db, doc }, (err, data) => {
-                if (err) { rej(err); return }
-                res(data)
+                if (err) { rej(err); return; }
+                res(data);
             })
         })
     }

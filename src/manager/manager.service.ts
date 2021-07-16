@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-// import { jobOptProxyClient } from './dto/manager.dto';
+// import { jobOptProxyClient } from 'ms-jobmanager';
 import * as jobManagerClient from 'ms-jobmanager'
 import { ConfigService } from "@nestjs/config"
 
@@ -45,8 +45,8 @@ export class ManagerService {
                 console.log("script error");
                 rej(message)
             });
-            job.on("lostJob", () => {
-                console.log("lost job");
+            job.on("lostJob", (jRef) => {
+                console.log("lost job", jRef);
                 rej()
             });
             job.on("fsFatalError", (message: string, error: string) => {
