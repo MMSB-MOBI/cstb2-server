@@ -40,32 +40,36 @@ export class ManagerService {
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
 
-            // manage errors
-            job.on("scriptError", (message: string) => {
+            // errors
+            job.on("scriptError", (message: string, data:jobManagerClient.jobOptProxyClient) => {
                 console.log("script error");
-                rej(message)
+                console.log(message);            
+                rej(data)
             });
-            job.on("lostJob", (jRef) => {
-                console.log("lost job", jRef);
+            job.on("lostJob", (data:jobManagerClient.jobOptProxyClient) => {
+                console.log("lost job", data);
                 rej()
             });
-            job.on("fsFatalError", (message: string, error: string) => {
+            job.on("fsFatalError", (message: string, error: string, data:jobManagerClient.jobOptProxyClient) => { //jobObject
                 console.log("fs fatal error");
-                rej(error)
+                console.log("message:", message);
+                console.log("error:", error);
+                console.log("data:", data);
+                rej(data)
             });
-            job.on("scriptSetPermissionError", (err) => {
+            job.on("scriptSetPermissionError", (err: string) => {
                 console.log("script set permission error");
                 rej(err)
             });
-            job.on("scriptWriteError", (err) => {
+            job.on("scriptWriteError", (err: string) => {
                 console.log("script write error");
                 rej(err)
             });
-            job.on("scriptReadError", (err) => {
+            job.on("scriptReadError", (err: string) => {
                 console.log("script read error");
                 rej(err)
             });
-            job.on("inputError", (err) => {
+            job.on("inputError", (err: string) => {
                 console.log("input error");
                 rej(err)
             });

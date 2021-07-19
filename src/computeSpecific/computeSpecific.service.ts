@@ -7,7 +7,7 @@ import { ManagerService } from "../manager/manager.service";
 import { ComputeBaseService } from "../computeBase/computeBase.service";
 
 import { SpecificGeneInput, SpecificGeneResults } from '../computeSpecific/dto/computeSpecific.dto';
-import { jobOptProxyClient } from '../manager/dto/manager.dto'
+import * as jobManagerClient from 'ms-jobmanager'
 
 @Injectable()
 export class ComputeSpecificService extends ComputeBaseService {
@@ -21,7 +21,7 @@ export class ComputeSpecificService extends ComputeBaseService {
     }
 
     async specificGeneCompare(data: SpecificGeneInput) /* : Promise<SpecificGeneResults> */ {
-        const jobOpt: jobOptProxyClient = super.generateBaseJobOpt(data)
+        const jobOpt: jobManagerClient.jobOptProxyClient = super.generateBaseJobOpt(data)
         jobOpt.exportVar.blastdb = this.blastdb;
         jobOpt.exportVar.seq = data.seq;
         jobOpt.exportVar.pid = data.pid;

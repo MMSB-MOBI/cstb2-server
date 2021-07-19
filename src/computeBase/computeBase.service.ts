@@ -1,5 +1,5 @@
-import { ConfigModule, ConfigService } from "@nestjs/config"
-import { jobOptProxyClient } from "../manager/dto/manager.dto"
+import { ConfigService } from "@nestjs/config"
+import * as jobManagerClient from 'ms-jobmanager'
 import { AllGenomesInput } from '../computeAll/dto/computeAll.dto';
 
 export abstract class ComputeBaseService {
@@ -31,7 +31,7 @@ export abstract class ComputeBaseService {
         this.script = configService.get("job-manager.scriptRoot") + "/" + script;
     }
 
-    generateBaseJobOpt(data: AllGenomesInput): jobOptProxyClient {
+    generateBaseJobOpt(data: AllGenomesInput): jobManagerClient.jobOptProxyClient {
         const jobOpt = {
             "exportVar": {
                 "rfg": this.rfg,

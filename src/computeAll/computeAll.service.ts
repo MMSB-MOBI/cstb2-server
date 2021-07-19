@@ -7,7 +7,7 @@ import { ManagerService } from "../manager/manager.service";
 import { ComputeBaseService } from "../computeBase/computeBase.service";
 
 import { AllGenomesInput, AllGenomesResults } from './dto/computeAll.dto';
-import { jobOptProxyClient } from '../manager/dto/manager.dto'
+import * as jobManagerClient from 'ms-jobmanager'
 
 @Injectable()
 export class ComputeAllService extends ComputeBaseService {
@@ -18,7 +18,7 @@ export class ComputeAllService extends ComputeBaseService {
     }
 
     async allGenomesCompare(data: AllGenomesInput) /* : Promise<AllGenomesResults> */ {
-        const jobOpt: jobOptProxyClient = super.generateBaseJobOpt(data)
+        const jobOpt: jobManagerClient.jobOptProxyClient = super.generateBaseJobOpt(data)
         console.log('AG', jobOpt);
         
         // try {
