@@ -9,13 +9,11 @@ db:
     port: 5984
     user: 'admin'
     password: 'admin'
-
+    
     maxi_tree:
       database: 'tree'
-
     taxon:
       name: 'taxon_db'
-
     genome:
       name: 'genome_db'
 

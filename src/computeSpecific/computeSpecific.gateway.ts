@@ -12,24 +12,21 @@ import { ComputeSpecificService } from "./computeSpecific.service";
 import { UsePipes, ValidationPipe } from '@nestjs/common'
 import { UseFilters, WsExceptionFilter } from '@nestjs/common';
 
-// regarder doc nest WsExceptionError
-class CustomError extends Error {
-    private jobID: string;
-
-    constructor(jobID = 'jobid123', ...params) {
-        // Pass remaining arguments (including vendor specific ones) to parent constructor
-        super(...params)
-
-        // Maintains proper stack trace for where our error was thrown (only available on V8)
-        if (Error.captureStackTrace) {
-            Error.captureStackTrace(this, CustomError)
-        }
-
-        this.name = 'CustomError'
-        // Custom debugging information
-        this.jobID = jobID
-    }
-}
+// // Custom Error class
+// class CustomError extends Error {
+//     private jobID: string;
+//     constructor(jobID = 'jobid123', ...params) {
+//         // Pass remaining arguments (including vendor specific ones) to parent constructor
+//         super(...params)
+//         // Maintains proper stack trace for where our error was thrown (only available on V8)
+//         if (Error.captureStackTrace) {
+//             Error.captureStackTrace(this, CustomError)
+//         }
+//         this.name = 'CustomError'
+//         // Custom debugging information
+//         this.jobID = jobID
+//     }
+// }
 
 @WebSocketGateway()
 export class ComputeSpecificGateway {
@@ -58,11 +55,9 @@ export class ComputeSpecificGateway {
             console.log("Error", e);
             try {
                 throw new WsException(e);
-                // const jobID = '123';
-                // throw new CustomError(e, jobID);
+                // throw new CustomError(e);
             } catch (e) {
-                console.error(e.name);
-                console.error(e.foo);
+                console.error(e);
             }
         }
     }

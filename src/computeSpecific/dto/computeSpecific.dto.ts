@@ -49,4 +49,22 @@ export class SpecificGeneResults {
 
   @IsDefined()
   number_treated_hits: number;
+
+  @IsDefined()
+  data
+
+  @IsDefined()
+  data_card
+
+  @IsDefined()
+  tag
+
+  @IsDefined()
+  size
+
+  @IsDefined()
+  fasta_metadata
+
+  @IsDefined()
+  gene
 }

@@ -1,4 +1,4 @@
-import { IsDefined, MinLength } from 'class-validator';
+import { IsDefined } from 'class-validator';
 import { Node } from '../interfaces/taxonomyTree.interface'
 
 export class ImportedTree {

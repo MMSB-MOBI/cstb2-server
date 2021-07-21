@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-// import { jobOptProxyClient } from 'ms-jobmanager';
 import * as jobManagerClient from 'ms-jobmanager'
 import { ConfigService } from "@nestjs/config"
 
@@ -13,10 +12,6 @@ export class ManagerService {
         this.port = configService.get('job-manager.port')
         this.TCPip = configService.get("job-manager.address");
     }
-
-    // generateJobOpt(exportVar: Record<string, any>): jobOptProxyClient {
-    //     return
-    // }
 
     async start() {
         if (this._connect) return new Promise((res, rej) => {
@@ -40,7 +35,7 @@ export class ManagerService {
         return new Promise((res, rej) => {
             const job = jobManagerClient.push(jobOpt);
 
-            // errors
+            // Errors
             job.on("scriptError", (message: string, data:jobManagerClient.jobOptProxyClient) => {
                 console.log("script error");
                 console.log(message);            
@@ -82,12 +77,10 @@ export class ManagerService {
                 stdout.on('end', () => {
                     const _ = Buffer.concat(chunks).toString('utf8');
                     try {
-                        const data = JSON.parse(_) // catch: res.status(500).json({ error: e.message, stack: e.stack });
+                        const data = JSON.parse(_)
                         res(data);
                     } catch (e) {
                         rej(e);
-                        // socket.emit('workflowError', "Can't parse sbatch output");
-                        // return;
                     }
                 });
                 stderr.on('data', (chunk: Uint8Array) => errchunks.push(chunk))

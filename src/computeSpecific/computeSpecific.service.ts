@@ -28,7 +28,6 @@ export class ComputeSpecificService extends ComputeBaseService {
         // jobOpt.exportVar.n = data.n;
         console.log('SG', jobOpt);
 
-        // try {
         const SGresults = await this.managerService.push(jobOpt);
         const results = plainToClass(SpecificGeneResults, SGresults);
 
@@ -38,9 +37,5 @@ export class ComputeSpecificService extends ComputeBaseService {
             // raise error to client
         }
         return results
-        // } catch (e) {
-        //     console.log("error", e);
-        //     throw (e);
-        // }
     }
 }

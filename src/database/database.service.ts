@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ImportedTree } from '../taxonomyTree/dto/taxonomyTree.dto';
 import { ConfigService } from "@nestjs/config"
-import { NotFoundException } from '../taxonomyTree/interfaces/taxonomyTree.interface'
 
 @Injectable()
 export class DatabaseService {
