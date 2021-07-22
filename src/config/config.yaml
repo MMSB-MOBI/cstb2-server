@@ -1,14 +1,14 @@
 job-manager:
-  address: "127.0.0.1"
+  address: "192.168.118.202"
   port: 1235
-  scriptRoot: '/home/cassandre/Desktop/cstb2-server/scripts'
+  scriptRoot: '/data/www_dev/cstb/lib/cstb2-server/src/scripts'
 
 db:
   couchDB:
-    host: 'localhost'
+    host: 'arwen-cdb.ibcp.fr'
     port: 5984
-    user: 'admin'
-    password: 'admin'
+    user: 'cstb_agent'
+    password: '8n9m8n9m4zY2kZtePvP'
     
     maxi_tree:
       database: 'tree'

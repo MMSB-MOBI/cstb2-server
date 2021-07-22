@@ -12,7 +12,7 @@ import configuration from './config/configuration';
 @Module({
   imports: [TaxonomyTreeModule, ComputeSpecificModule, ComputeAllModule, DatabaseModule, ManagerModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../..', 'static'),
+      rootPath: join(__dirname, '../', 'static/www'),
       exclude: ['/dev*', '/compute*'],
     }),
     ConfigModule.forRoot({
