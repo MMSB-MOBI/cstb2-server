@@ -12,11 +12,13 @@ export class DatabaseService {
     private readonly nanoHandler?: any;
 
     constructor(private configService: ConfigService) {
+        console.log(configService.get('db.couchDB.connect'));
+        
         const { user, password, host, port } = configService.get('db.couchDB.connect');
         this.user = user;
         this.password = password;
-        this.port = host;
-        this.host = port;
+        this.host = host;
+        this.port = port;
 
         this.url = `http://${this.user}:${this.password}@${this.host}:${this.port}`;
         this.nanoHandler = require('nano')(this.url);
