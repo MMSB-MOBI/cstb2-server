@@ -29,8 +29,8 @@ export abstract class ComputeBaseService {
         const { user, password, host, port } = configService.get('db.couchDB.connect');
         this.user = user;
         this.password = password;
-        this.port = host;
-        this.host = port;
+        this.host = host;
+        this.port = port;
         this.motifBrokerPort = configService.get('db.motif-broker.port')
         this.motifBrokerHost = configService.get('db.motif-broker.host')
 
