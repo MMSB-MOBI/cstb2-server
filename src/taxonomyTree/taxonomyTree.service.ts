@@ -15,7 +15,6 @@ export class TaxonomyTreeService {
     async getTree(): Promise<ImportedTree> {
         const doc = this.configService.get('db.couchDB.maxi_tree.doc');        
         const db = this.configService.get('db.couchDB.maxi_tree.database');
-        console.log(doc, db);
         try {
             var tree = await this.databaseService.requestTree(db, doc);
         } catch (err) {
