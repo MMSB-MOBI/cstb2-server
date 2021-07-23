@@ -8,16 +8,16 @@ export class DatabaseService {
     private password: string;
     private port: number;
     private host: string;
-    private database: string;
     private url: string;
     private readonly nanoHandler?: any;
 
     constructor(private configService: ConfigService) {
-        this.user = configService.get("db.couchDB.user");
-        this.password = configService.get("db.couchDB.password");
-        this.port = configService.get("db.couchDB.port");
-        this.host = configService.get("db.couchDB.host");
-        this.database = configService.get("db.couchDB.database");
+        const { user, password, host, port } = configService.get('db.couchDB.connect');
+        this.user = user;
+        this.password = password;
+        this.port = host;
+        this.host = port;
+
         this.url = `http://${this.user}:${this.password}@${this.host}:${this.port}`;
         this.nanoHandler = require('nano')(this.url);
     };

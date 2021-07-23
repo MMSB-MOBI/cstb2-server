@@ -5,8 +5,17 @@ import { AllGenomesInput } from '../computeAll/dto/computeAll.dto';
 export abstract class ComputeBaseService {
     configToken: string
     rfg: string
+
+    user: string
+    password: string
+    port: number
+    host: string
+    motifBrokerPort: string
+    motifBrokerHost: string
+
     MOTIF_BROKER_ENDPOINT: string
     COUCH_ENDPOINT: string
+
     taxon_db: string
     genome_db: string
     modules: string[]
@@ -17,10 +26,17 @@ export abstract class ComputeBaseService {
     constructor(configService: ConfigService, configToken) {
         this.configToken = configToken;
 
-        const { rfg, MOTIF_BROKER_ENDPOINT, COUCH_ENDPOINT } = configService.get(`${this.configToken}.exportVar`);
-        this.rfg = rfg;
-        this.MOTIF_BROKER_ENDPOINT = MOTIF_BROKER_ENDPOINT;
-        this.COUCH_ENDPOINT = COUCH_ENDPOINT;
+        const { user, password, host, port } = configService.get('db.couchDB.connect');
+        this.user = user;
+        this.password = password;
+        this.port = host;
+        this.host = port;
+        this.motifBrokerPort = configService.get('db.motif-broker.port')
+        this.motifBrokerHost = configService.get('db.motif-broker.host')
+
+        this.rfg = configService.get(`${this.configToken}.exportVar.rfg`);
+        this.MOTIF_BROKER_ENDPOINT = `http://${this.motifBrokerHost}:${this.motifBrokerPort}`;;
+        this.COUCH_ENDPOINT = `http://${this.user}:${this.password}@${this.host}:${this.port}`;
         this.taxon_db = configService.get("db.couchDB.taxon.name");
         this.genome_db = configService.get("db.couchDB.genome.name");
 

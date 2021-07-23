@@ -17,7 +17,7 @@ export class ComputeSpecificService extends ComputeBaseService {
         private managerService: ManagerService,
         private configService: ConfigService) {
         super(configService, 'specificGene');
-        this.blastdb = configService.get(`${this.configToken}.exportVar`).blastdb
+        this.blastdb = configService.get(`${this.configToken}.exportVar.blastdb`)
     }
 
     async specificGeneCompare(data: SpecificGeneInput) /* : Promise<SpecificGeneResults> */ {

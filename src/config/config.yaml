@@ -5,10 +5,11 @@ job-manager:
 
 db:
   couchDB:
-    host: 'arwen-cdb.ibcp.fr'
-    port: 5984
-    user: 'cstb_agent'
-    password: '8n9m4zY2kZtePvP'
+    connect:
+      user: 'cstb_agent'
+      password: '8n9m4zY2kZtePvP'
+      host: 'arwen-cdb.ibcp.fr'
+      port: 5984
     
     maxi_tree:
       doc: 'maxi_tree'
@@ -20,13 +21,11 @@ db:
 
   motif-broker:
     host: 'localhost'
-    port: 0000
+    port: 1236
 
 allGenomes:
   exportVar:
-    rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
+    rfg: '/data/databases/cstb/rc03/index'
 
   modules: ["crispr-prod/3.0.0"]
   jobProfile: "ws2-short"
@@ -35,10 +34,8 @@ allGenomes:
 
 specificGene:
   exportVar:
-    blastdb: ''
-    rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
+    blastdb: '/data/databases/cstb/rc03/blast/blast'
+    rfg: '/data/databases/cstb/rc03/index'
 
   modules: ["crispr-prod/3.0.0", "blast+"]
   jobProfile: "ws2-cstb"
