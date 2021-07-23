@@ -1,17 +1,18 @@
 job-manager:
   address: "192.168.118.202"
   port: 1235
-  scriptRoot: '/data/www_dev/cstb/lib/cstb2-server/src/scripts'
+  scriptRoot: '/data/www_dev/cstb/lib/cstb2-server/scripts'
 
 db:
   couchDB:
     host: 'arwen-cdb.ibcp.fr'
     port: 5984
     user: 'cstb_agent'
-    password: '8n9m8n9m4zY2kZtePvP'
+    password: '8n9m4zY2kZtePvP'
     
     maxi_tree:
-      database: 'tree'
+      doc: 'maxi_tree'
+      database: 'rc03_tree'
     taxon:
       name: 'taxon_db'
     genome:
@@ -28,9 +29,9 @@ allGenomes:
     COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0"]
-  jobProfile: "crispr-dev"
+  jobProfile: "ws2-short"
   script: "computeAll.sh"
-  sysSettingsKey: "crispr-dev"
+  sysSettingsKey: "ws2-dev-cstb"
 
 specificGene:
   exportVar:
@@ -40,6 +41,6 @@ specificGene:
     COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0", "blast+"]
-  jobProfile: "crispr-dev"
+  jobProfile: "ws2-cstb"
   script: "computeSpecific.sh"
-  sysSettingsKey: "crispr-dev"
+  sysSettingsKey: "ws2-short"

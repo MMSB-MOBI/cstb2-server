@@ -1,16 +1,20 @@
 import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { ImportedTree } from './dto/taxonomyTree.dto';
+import { ConfigService } from "@nestjs/config"
 // import { NotFoundException } from './interfaces/taxonomyTree.interface'
 // import { validate } from 'class-validator';
 
 @Injectable()
 export class TaxonomyTreeService {
-    constructor(private readonly databaseService: DatabaseService) { }
+    constructor(
+        private readonly databaseService: DatabaseService,
+        private configService: ConfigService
+        ) { }
 
     async getTree(): Promise<ImportedTree> {
-        const doc = "maxi_tree";
-        const db = "tree";
+        const doc = this.configService.get('db.couchDB.maxi_tree.doc');        
+        const db = this.configService.get('db.couchDB.maxi_tree.database');
         try {
             var tree = await this.databaseService.requestTree(db, doc);
         } catch (err) {
