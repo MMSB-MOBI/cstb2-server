@@ -22,6 +22,10 @@ export class ComputeAllService extends ComputeBaseService {
         console.log('AG', jobOpt);
     
         const AGresults = await this.managerService.push(jobOpt);
+        if (AGresults.error){
+            console.log(AGresults.error);            
+        }
+        
         const results = plainToClass(AllGenomesResults, AGresults);
 
         const errors = await validate(results);
