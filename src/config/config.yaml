@@ -15,12 +15,12 @@ db:
       doc: 'maxi_tree'
       database: 'rc03_tree'
     taxon:
-      name: 'taxon_db'
+      name: 'rc03_taxon'
     genome:
-      name: 'genome_db'
+      name: 'rc03_genome'
 
   motif-broker:
-    host: 'localhost'
+    host: '192.168.118.202'
     port: 1236
 
 allGenomes:
@@ -29,7 +29,7 @@ allGenomes:
 
   modules: ["crispr-prod/3.0.0"]
   jobProfile: "ws2-short"
-  script: "computeAll.sh"
+  script: "crispr_workflow.sh"
   sysSettingsKey: "ws2-dev-cstb"
 
 specificGene:
@@ -39,5 +39,5 @@ specificGene:
 
   modules: ["crispr-prod/3.0.0", "blast+"]
   jobProfile: "ws2-cstb"
-  script: "computeSpecific.sh"
+  script: "crispr_workflow_specific.sh"
   sysSettingsKey: "ws2-short"
