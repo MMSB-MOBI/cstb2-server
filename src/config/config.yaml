@@ -1,37 +1,46 @@
 job-manager:
-  address: "127.0.0.1"
-  port: 1234
-  scriptRoot: '/home/cassandre/Desktop/cstb2-server/scripts'
+  address: "192.168.118.202"
+  port: 1235
+  scriptRoot: '/data/www_dev/cstb/lib/cstb2-server/scripts'
 
 db:
   couchDB:
-    host: 'localhost'
-    port: 5984
-    user: 'admin'
-    password: 'admin'
+    connect:
+      user: 'cstb_agent'
+      password: '8n9m4zY2kZtePvP'
+      host: 'arwen-cdb.ibcp.fr'
+      port: 5984
     
     maxi_tree:
       doc: 'maxi_tree'
-      database: 'tree'
+      database: 'rc03_tree'
     taxon:
-      name: 'taxon_db'
+      name: 'rc03_taxon'
     genome:
-      name: 'genome_db'
+      name: 'rc03_genome'
 
   motif-broker:
-    host: 'localhost'
-    port: 0000
+    host: '192.168.118.202'
+    port: 1236
 
 allGenomes:
   exportVar:
-    rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
+    rfg: '/data/databases/cstb/rc03/index'
 
   modules: ["crispr-prod/3.0.0"]
-  jobProfile: "crispr-dev"
-  script: "computeAll.sh"
-  sysSettingsKey: "crispr-dev"
+  jobProfile: "ws2-short"
+  script: "crispr_workflow.sh"
+  sysSettingsKey: "ws2-dev-cstb"
+
+specificGene:
+  exportVar:
+    blastdb: '/data/databases/cstb/rc03/blast/blast'
+    rfg: '/data/databases/cstb/rc03/index'
+
+  modules: ["crispr-prod/3.0.0", "blast+"]
+  jobProfile: "ws2-cstb"
+  script: "crispr_workflow_specific.sh"
+  sysSettingsKey: "ws2-short"
 
 specificGene:
   exportVar:
