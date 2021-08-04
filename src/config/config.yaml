@@ -25,22 +25,18 @@ db:
 allGenomes:
   exportVar:
     rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0"]
-  jobProfile: "crispr-dev"
+  jobProfile: "default"
   script: "computeAll.sh"
-  sysSettingsKey: "crispr-dev"
+  sysSettingsKey: "ws2-dev-cstb"
 
 specificGene:
   exportVar:
     blastdb: ''
     rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
 
   modules: ["crispr-prod/3.0.0", "blast+"]
-  jobProfile: "crispr-dev"
+  jobProfile: "default"
   script: "computeSpecific.sh"
-  sysSettingsKey: "crispr-dev"
+  sysSettingsKey: "ws2-short"
