@@ -41,15 +41,3 @@ specificGene:
   jobProfile: "ws2-cstb"
   script: "crispr_workflow_specific.sh"
   sysSettingsKey: "ws2-short"
-
-specificGene:
-  exportVar:
-    blastdb: ''
-    rfg: ''
-    MOTIF_BROKER_ENDPOINT: ''
-    COUCH_ENDPOINT: ''
-
-  modules: ["crispr-prod/3.0.0", "blast+"]
-  jobProfile: "crispr-dev"
-  script: "computeSpecific.sh"
-  sysSettingsKey: "crispr-dev"
