@@ -1,6 +1,6 @@
 job-manager:
   address: "127.0.0.1"
-  port: 1235
+  port: 1234
   scriptRoot: '/home/cassandre/Desktop/cstb2-server/scripts'
 
 db:
