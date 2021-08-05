@@ -39,9 +39,9 @@ export class ComputeAllGateway {
     @UseFilters(/* new WsExceptionFilter() */)
     @SubscribeMessage('allGenomesRequest')
     async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<WsResponse<AllGenomesResults>> {
-        console.log('socket:submitAllGenomes', data);
-        console.log(`included genomes:\n${data.gi}`);
-        if (data.gni.length > 0) console.log(`excluded genomes:\n${data.gni}`);
+        console.log('Socket: submitAllGenomes', data);
+        console.log(`Included genomes:\n${data.gi}`);
+        if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
         console.log(`${data.pam}`);
         console.log(`Length of motif: ${data.sgrna_length}`);
 

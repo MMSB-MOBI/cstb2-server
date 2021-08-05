@@ -19,13 +19,9 @@ export class ComputeAllService extends ComputeBaseService {
 
     async allGenomesCompare(data: AllGenomesInput) /* : Promise<AllGenomesResults> */ {
         const jobOpt: jobManagerClient.jobOptProxyClient = super.generateBaseJobOpt(data)
-        console.log('AG', jobOpt);
-    
+        console.log('ALL GENOMES', jobOpt);
+
         const AGresults = await this.managerService.push(jobOpt);
-        if (AGresults.error){
-            console.log(AGresults.error);            
-        }
-        
         const results = plainToClass(AllGenomesResults, AGresults);
 
         const errors = await validate(results);

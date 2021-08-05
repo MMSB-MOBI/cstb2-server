@@ -39,7 +39,7 @@ export class ComputeSpecificGateway {
     @UseFilters(/* new WsExceptionFilter() */)
     @SubscribeMessage('specificGeneRequest')
     async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<WsResponse<SpecificGeneResults>> {
-        console.log('socket:submitSpecificGene\n', data);
+        console.log('Socket: submitSpecificGene\n', data);
         console.log(`Included genomes:\n${data.gi}`);
         if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
         console.log(`PAM motifs: ${data.pam}`);
