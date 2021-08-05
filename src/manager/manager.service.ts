@@ -38,7 +38,9 @@ export class ManagerService {
             // Errors
             job.on("scriptError", (message: string, data:jobManagerClient.jobOptProxyClient) => {
                 console.log("script error");
-                console.log(message);            
+                console.log(message);
+                console.log(data);
+                
                 rej(data)
             });
             job.on("lostJob", (data:jobManagerClient.jobOptProxyClient) => {
