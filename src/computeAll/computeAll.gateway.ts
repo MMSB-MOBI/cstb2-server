@@ -38,7 +38,7 @@ export class ComputeAllGateway {
     @UsePipes(new ValidationPipe())
     @UseFilters(/* new WsExceptionFilter() */)
     @SubscribeMessage('allGenomesRequest')
-    async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<WsResponse<AllGenomesResults>> {
+    async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<WsResponse<any>> {
         console.log('Socket: submitAllGenomes', data);
         console.log(`Included genomes:\n${data.gi}`);
         if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
@@ -47,17 +47,14 @@ export class ComputeAllGateway {
 
         try {
             const results: AllGenomesResults = await this.computeAllService.allGenomesCompare(data);
-            console.log("Returning allGenomesRequest");
-            console.log(results);
+            
+            if ('emptySearch' in results) return { event: 'emptySearch' , data : results["emptySearch"]}
+            if ('error' in results) throw new WsException(results['error'])
+            //console.log(results);
             return { event: 'allGenomesResults', data: results };
         } catch (e) {
             console.log("Error", e);
-            try {
-                throw new WsException(e);
-                // throw new CustomError(e);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+            throw new WsException(e); 
+                    }
     }
 }

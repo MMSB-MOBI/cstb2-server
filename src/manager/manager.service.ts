@@ -14,86 +14,97 @@ export class ManagerService {
     }
 
     async start() {
-        if (this._connect) return new Promise((res, rej) => {
-            setTimeout(() => {
-                res(true)
-            }, 500)
+
+        return new Promise((res, rej) => {
+            if (this._connect) res(true)
+            else{
+                jobManagerClient.start({ port: this.port, TCPip: this.TCPip }).then(disconnectEmitter => {
+                    this._connect = true
+                    disconnectEmitter.on("disconnect", () => {
+                        this._connect = false
+                    })
+                    res(true)
+                }).catch(e => {
+                    console.error(`Unable to connect at ${this.TCPip}:${this.port} : ${e}`)
+                    rej(e)
+                })
+            }
+           
         })
-        try {
-            await jobManagerClient.start({ port: this.port, TCPip: this.TCPip })
-            this._connect = true
-            return true
-        } catch (e) {
-            console.error(`Unable to connect at ${this.TCPip}:${this.port} : ${e}`)
-            return false
-        }
     }
 
     async push(jobOpt: jobManagerClient.jobOptProxyClient): Promise<any> { // Guillaume doit typer l'objet job
-        if (!this._connect) await this.start();
 
         return new Promise((res, rej) => {
-            const job = jobManagerClient.push(jobOpt);
-
-            // Errors
-            job.on("scriptError", (message: string, data:jobManagerClient.jobOptProxyClient) => {
-                console.log("script error");
-                console.log(message);
-                console.log(data);
-                
-                rej(data)
-            });
-            job.on("lostJob", (data:jobManagerClient.jobOptProxyClient) => {
-                console.log("lost job", data);
-                rej()
-            });
-            job.on("fsFatalError", (message: string, error: string, data:jobManagerClient.jobOptProxyClient) => { //jobObject
-                console.log("fs fatal error");
-                console.log("message:", message);
-                console.log("error:", error);
-                console.log("data:", data);
-                rej(data)
-            });
-            job.on("scriptSetPermissionError", (err: string) => {
-                console.log("script set permission error");
-                rej(err)
-            });
-            job.on("scriptWriteError", (err: string) => {
-                console.log("script write error");
-                rej(err)
-            });
-            job.on("scriptReadError", (err: string) => {
-                console.log("script read error");
-                rej(err)
-            });
-            job.on("inputError", (err: string) => {
-                console.log("input error");
-                rej(err)
-            });
-
-            job.on("completed", (stdout: any, stderr: any) => {
-                const chunks: Uint8Array[] = [];
-                const errchunks: Uint8Array[] = [];
-                console.log("STDOUT");
-                stdout.on('data', (chunk: Uint8Array) => chunks.push(chunk))
-                stdout.on('end', () => {
-                    const _ = Buffer.concat(chunks).toString('utf8');
-                    try {
-                        const data = JSON.parse(_)
-                        res(data);
-                    } catch (e) {
-                        rej(e);
-                    }
+            this.start().then(() => {
+                const job = jobManagerClient.push(jobOpt);
+                job.on("scriptError", (message: string, data:jobManagerClient.jobOptProxyClient) => {
+                    console.error("script error");
+                    
+                    rej(`Error with job ${job.id} : script error`)
                 });
-                stderr.on('data', (chunk: Uint8Array) => errchunks.push(chunk))
-                stderr.on('end', () => {
-                    if (errchunks) {
-                        const _ = Buffer.concat(errchunks).toString('utf8');
-                        console.log(`erreur standard job>${_}<`);
-                        if (_) rej(_)
-                    }
+                job.on("lostJob", (data:jobManagerClient.jobOptProxyClient) => {
+                    //console.log("lost job", data);
+                    rej(`Error with job ${job.id} : job has been lost`)
+                });
+
+                
+                job.on("fsFatalError", (message: string, error: string, data:jobManagerClient.jobOptProxyClient) => { //jobObject
+                    console.log("fs fatal error");
+                    console.log("message:", message);
+                    console.log("error:", error);
+                    console.log("data:", data);
+                    rej(`Error with job ${job.id} : fsFatalError`)
+                });
+                job.on("scriptSetPermissionError", (err: string) => {
+                    console.error(err)
+                    rej(`Error with job ${job.id} : script permission error`)
+                });
+                job.on("scriptWriteError", (err: string) => {
+                    console.error("scriptWriteError", err)
+                    rej(`Error with job ${job.id} : script write error`)
+                });
+                job.on("scriptReadError", (err: string) => {
+                    console.error("script read error", err);
+                    rej(`Error with job ${job.id} : script read error`)
+                });
+                job.on("inputError", (err: string) => {
+                    console.error("input error", err);
+                    rej(`Error with job ${job.id} : input error`)
+                });
+
+                job.on("disconnect_error",() => {
+                    console.error("job disconnected")
+                    rej(`Error with job ${job.id} : disconnect error`)
                 })
-            });
-        });
+
+                job.on("completed", (stdout: any, stderr: any) => {
+                    const chunks: Uint8Array[] = [];
+                    const errchunks: Uint8Array[] = [];
+                    console.log("STDOUT");
+                    stdout.on('data', (chunk: Uint8Array) => chunks.push(chunk))
+                    stdout.on('end', () => {
+                        const _ = Buffer.concat(chunks).toString('utf8');
+                        try {
+                            const data = JSON.parse(_)
+                            res(data);
+                        } catch (e) {
+                            rej(e);
+                        }
+                    });
+                    stderr.on('data', (chunk: Uint8Array) => errchunks.push(chunk))
+                    stderr.on('end', () => {
+                        if (errchunks) {
+                            const _ = Buffer.concat(errchunks).toString('utf8');
+                            console.log(`erreur standard job>${_}<`);
+                            if (_) rej(_)
+                        }
+                    })
+                })
+            })
+            .catch(e => {
+                rej(`Job manager error : ${e}`)
+            })
+        })
     }
 }
