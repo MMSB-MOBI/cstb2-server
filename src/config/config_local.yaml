@@ -1,0 +1,37 @@
+job-manager:
+  address: "localhost"
+  port: 6001
+  scriptRoot: '/data1/cecile/web_services/CSTB/cstb2-server/scripts'
+
+db:
+  couchDB:
+    connect:
+      user: '#####'
+      password: '#####'
+      host: 'localhost'
+      port: 1234
+    
+    maxi_tree:
+      doc: 'maxi_tree'
+      database: 'rc03_tree'
+    taxon:
+      name: 'rc03_taxon'
+    genome:
+      name: 'rc03_genome'
+
+  motif-broker:
+    host: 'localhost'
+    port: 6003
+
+allGenomes:
+  exportVar:
+    rfg: '/mnt/ws/data/databases/cstb/rc03/index'
+  
+  script: "crispr_workflow_local.sh"
+
+specificGene: 
+  exportVar: 
+    rfg: '/mnt/ws/data/databases/cstb/rc03/index'
+    blastdb: '/mnt/ws/data/databases/cstb/rc03/blast/blast'
+  script: "crispr_workflow_specific_local.sh"
+

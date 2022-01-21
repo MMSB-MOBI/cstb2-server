@@ -71,3 +71,153 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+# Deploy local version 
+
+## Client and server
+
+Download and init CSTB client and server
+```
+git clone https://github.com/MMSB-MOBI/cstb2-server
+cd cstb2-server
+npm i
+cd ..
+git clone https://github.com/MMSB-MOBI/cstb-client
+npm i
+```
+
+## Job manager
+
+Clone and init ms-jobmanager
+```
+git clone https://github.com/MMSB-MOBI/ms-jobmanager.git
+cd ms-jobmanager
+npm i
+```
+
+Launch ms-jobmanager for local computation 
+```
+node bin/startServer.js -e emulate -p 6000 -k 6001 -c <cache directory> --force
+```
+
+Change adress and listening port in config_local.yaml 
+```
+job-manager:
+  address: "localhost"
+  port: 6001
+```
+
+## Motif-broker
+Clone and init motif-broker
+```
+git clone https://github.com/MMSB-MOBI/motif-broker
+cd motif-broker
+npm i
+```
+
+You need to have a local version of couch database (How to construct it ? https://github.com/MMSB-MOBI/CSTB_database_manager) or redirect the server version : 
+```
+# Redirect arwen-cdb.ibcp.fr:5984 to localhost:1234
+ssh arwen -L 1234:arwen-cdb.ibcp.fr:5984
+```
+
+Launch motif-broker
+```
+node build/index.js -f prefix_rules.json -d http://<user>:<password>@localhost -p 1234 -l 6003
+```
+
+Update config_local.yaml 
+```
+db:
+  couchDB:
+    connect:
+      user: <user>
+      password: <password>
+      host: 'localhost'
+      port: 1234
+  
+  motif-broker:
+    host: 'localhost'
+    port: 6003
+```
+
+
+## Environments and tools
+
+### crispr-set
+
+Install crispr-set 
+```
+git clone https://github.com/glaunay/crispr-set
+python setup.py build
+ln -s build/lib.linux-x86_64-3.7/*so twobits.so
+gcc -Wall -std=c99 main.c custom_*.c two_bits_encoding.c -I./include -o setCompare -pedantic -lm
+```
+
+Change $PATH variable to include setCompare binary in crispr_workflow_local.sh and crispr_workflow_specific_local.sh
+```bash
+export PATH=$PATH:<crispr-set path>
+```
+
+### CSTB scripts 
+
+Create python3 venv to install pip dependencies
+```
+python -m venv cstb_env
+source cstb/bin/activate
+cd cstb_env
+git clone https://github.com/MMSB-MOBI/CSTB
+cd CSTB
+pip install -r requirements.txt
+```
+
+Load env and include CSTB module in PYTHONPATH in crispr_workflow_local.sh and crispr_workflow_specific_local.sh
+```vasg
+source <csbt_env_path>/bin/activate
+CRISPR_TOOLS_SCRIPT_PATH=<csbt_env_path>/CSTB/bin
+export PYTHONPATH=<csbt_env_path>/CSTB/lib
+```
+
+### Blast
+Blast is only used for specific gene part. 
+
+If you already have blast installed or if you want a global version you can install it on your computer and be sure the binaries are in your PATH or include them through `export PATH` in crispr_workflow_specific_local.sh
+
+As an alternative you can also create a conda environment and install blast inside it :
+```
+conda create -n blast
+conda activate blast
+conda install -c bioconda blast
+```
+
+Then load env in crispr_workflow_specific_local.sh : 
+```bash
+source <miniconda/anaconda path>/etc/profile.d/conda.sh #needed to call conda activate inside bash script
+conda activate blast
+```
+
+You may need to change other parameters such as filesystem database in config_local.yaml
+
+## Start the dev server
+Be sure config_local.yaml is load in src/config/configuration.ts 
+```ts
+const YAML_CONFIG_FILENAME = 'config_local.yaml';
+```
+
+Launch server in watch mode: 
+```
+cd <cstb2-server path>
+npm run start:dev
+```
+
+Launch client
+```
+cd <cstb-client path>
+npm run serve
+```
+
+
+
+
+
