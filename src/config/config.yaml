@@ -1,31 +1,31 @@
 job-manager:
-  address: "192.168.118.202"
-  port: 1235
-  scriptRoot: '/data/www_dev/cstb/lib/cstb2-server/scripts'
+  address: "####"
+  port: 0000
+  scriptRoot: '####'
 
 db:
   couchDB:
     connect:
-      user: 'cstb_agent'
-      password: '8n9m4zY2kZtePvP'
-      host: 'arwen-cdb.ibcp.fr'
-      port: 5984
+      user: '####'
+      password: '####'
+      host: '####'
+      port: 0000
     
     maxi_tree:
-      doc: 'maxi_tree'
-      database: 'rc03_tree'
+      doc: '####'
+      database: '####'
     taxon:
-      name: 'rc03_taxon'
+      name: '####'
     genome:
-      name: 'rc03_genome'
+      name: '####'
 
   motif-broker:
-    host: '192.168.118.202'
-    port: 1236
+    host: '####'
+    port: 0000
 
 allGenomes:
   exportVar:
-    rfg: '/data/databases/cstb/rc03/index'
+    rfg: '####'
 
   modules: ["crispr-prod/3.0.0"]
   jobProfile: "ws2-short"
@@ -34,8 +34,8 @@ allGenomes:
 
 specificGene:
   exportVar:
-    blastdb: '/data/databases/cstb/rc03/blast/blast'
-    rfg: '/data/databases/cstb/rc03/index'
+    blastdb: '####'
+    rfg: '####'
 
   modules: ["crispr-prod/3.0.0", "blast+"]
   jobProfile: "ws2-cstb"
