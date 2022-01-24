@@ -13,7 +13,8 @@ import {
 } from './dto/computeSpecific.dto';
 import { ComputeSpecificService } from './computeSpecific.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
-import { UseFilters, WsExceptionFilter } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
+import { WsExceptionFilter } from '../computeAll/ws-exception.filter';
 
 // // Custom Error class
 // class CustomError extends Error {
@@ -41,24 +42,26 @@ export class ComputeSpecificGateway {
   server: Server;
 
   @UsePipes(new ValidationPipe())
-  @UseFilters(/* new WsExceptionFilter() */)
+  @UseFilters(new WsExceptionFilter())
   @SubscribeMessage('specificGeneRequest')
   async specificGeneRequest(
     @MessageBody() data: SpecificGeneInput,
   ): Promise<WsResponse<SpecificGeneResults>> {
-    console.log('Socket: submitSpecificGene\n', data);
+    /*console.log('Socket: submitSpecificGene\n', data);
     console.log(`Included genomes:\n${data.gi}`);
     if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
     console.log(`PAM motifs: ${data.pam}`);
     console.log(`Length of motif: ${data.sgrna_length}`);
-    console.log(`Query: ${data.seq}`);
+    console.log(`Query: ${data.seq}`);*/
 
     try {
       const results = await this.computeSpecificService.specificGeneCompare(
         data,
       );
-      console.log('Returning specificGeneRequest');
-      console.log(results);
+
+      if ('emptySearch' in results)
+        return { event: 'emptySearch', data: results['emptySearch'] };
+      if ('error' in results) throw new WsException(results['error']);
       return { event: 'specificGeneResults', data: results };
     } catch (e) {
       console.log('Err', e);

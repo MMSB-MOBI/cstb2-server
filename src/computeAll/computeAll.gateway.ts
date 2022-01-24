@@ -10,7 +10,8 @@ import { Server } from 'socket.io';
 import { AllGenomesInput, AllGenomesResults } from './dto/computeAll.dto';
 import { ComputeAllService } from './computeAll.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
-import { UseFilters, WsExceptionFilter } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
+import { WsExceptionFilter } from './ws-exception.filter';
 
 // // Custom Error class
 // class CustomError extends Error {
@@ -28,6 +29,7 @@ import { UseFilters, WsExceptionFilter } from '@nestjs/common';
 //     }
 // }
 
+
 @WebSocketGateway()
 export class ComputeAllGateway {
   constructor(private readonly computeAllService: ComputeAllService) {}
@@ -36,7 +38,7 @@ export class ComputeAllGateway {
   server: Server;
 
   @UsePipes(new ValidationPipe())
-  @UseFilters(/* new WsExceptionFilter() */)
+  @UseFilters(new WsExceptionFilter())
   @SubscribeMessage('allGenomesRequest')
   async allGenomesRequest(
     @MessageBody() data: AllGenomesInput,

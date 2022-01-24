@@ -12,7 +12,7 @@ import { AllGenomesInput } from '../../computeAll/dto/computeAll.dto';
 export class SpecificGeneInput extends AllGenomesInput {
   @IsString()
   @IsDefined()
-  @Matches('^[ATCG]*$')
+  @Matches('^[ATCG\n]*$')
   seq: string;
 
   @IsNumber()
