@@ -1,15 +1,18 @@
 import {
-    MessageBody,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-    WsResponse,
-    WsException
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
+  WsException,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { SpecificGeneInput, SpecificGeneResults } from './dto/computeSpecific.dto';
-import { ComputeSpecificService } from "./computeSpecific.service";
-import { UsePipes, ValidationPipe } from '@nestjs/common'
+import {
+  SpecificGeneInput,
+  SpecificGeneResults,
+} from './dto/computeSpecific.dto';
+import { ComputeSpecificService } from './computeSpecific.service';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters, WsExceptionFilter } from '@nestjs/common';
 
 // // Custom Error class
@@ -30,35 +33,41 @@ import { UseFilters, WsExceptionFilter } from '@nestjs/common';
 
 @WebSocketGateway()
 export class ComputeSpecificGateway {
-    constructor(private readonly computeSpecificService: ComputeSpecificService) { }
+  constructor(
+    private readonly computeSpecificService: ComputeSpecificService,
+  ) {}
 
-    @WebSocketServer()
-    server: Server;
+  @WebSocketServer()
+  server: Server;
 
-    @UsePipes(new ValidationPipe())
-    @UseFilters(/* new WsExceptionFilter() */)
-    @SubscribeMessage('specificGeneRequest')
-    async specificGeneRequest(@MessageBody() data: SpecificGeneInput): Promise<WsResponse<SpecificGeneResults>> {
-        console.log('Socket: submitSpecificGene\n', data);
-        console.log(`Included genomes:\n${data.gi}`);
-        if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
-        console.log(`PAM motifs: ${data.pam}`);
-        console.log(`Length of motif: ${data.sgrna_length}`);
-        console.log(`Query: ${data.seq}`);
+  @UsePipes(new ValidationPipe())
+  @UseFilters(/* new WsExceptionFilter() */)
+  @SubscribeMessage('specificGeneRequest')
+  async specificGeneRequest(
+    @MessageBody() data: SpecificGeneInput,
+  ): Promise<WsResponse<SpecificGeneResults>> {
+    console.log('Socket: submitSpecificGene\n', data);
+    console.log(`Included genomes:\n${data.gi}`);
+    if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
+    console.log(`PAM motifs: ${data.pam}`);
+    console.log(`Length of motif: ${data.sgrna_length}`);
+    console.log(`Query: ${data.seq}`);
 
-        try {
-            const results = await this.computeSpecificService.specificGeneCompare(data);
-            console.log("Returning specificGeneRequest");
-            console.log(results);
-            return { event: 'specificGeneResults', data: results };
-        } catch (e) {
-            console.log("Error", e);
-            try {
-                throw new WsException(e);
-                // throw new CustomError(e);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+    try {
+      const results = await this.computeSpecificService.specificGeneCompare(
+        data,
+      );
+      console.log('Returning specificGeneRequest');
+      console.log(results);
+      return { event: 'specificGeneResults', data: results };
+    } catch (e) {
+      console.log('Err', e);
+      try {
+        throw new WsException(e);
+        // throw new CustomError(e);
+      } catch (e) {
+        console.error(e);
+      }
     }
+  }
 }

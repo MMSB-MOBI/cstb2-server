@@ -1,40 +1,26 @@
-import { IsDefined, MinLength } from 'class-validator';
+import {
+  IsDefined,
+  IsString,
+  Matches,
+  IsNumber,
+  Min,
+  Max,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { AllGenomesInput } from '../../computeAll/dto/computeAll.dto';
 
-export class SpecificGeneInput {
-  @MinLength(1, {
-    each: true,
-  })
-  gi: string[];
-
-  @MinLength(1, {
-    each: true,
-  })
-  gni: string[];
-
-  @MinLength(1, {
-    each: true,
-  })
-  pam: string;
-
-  @MinLength(1, {
-    each: true,
-  })
-  sgrna_length: string;
-
-  @MinLength(1, {
-    each: true,
-  })
-  email: string;
-
-  @MinLength(1, {
-    each: true,
-  })
-  pid: string;
-
-  @MinLength(1, {
-    each: true,
-  })
+export class SpecificGeneInput extends AllGenomesInput {
+  @IsString()
+  @IsDefined()
+  @Matches('^[ATCG]*$')
   seq: string;
+
+  @IsNumber()
+  @IsDefined()
+  @Min(0)
+  @Max(100)
+  @Type(() => Number)
+  pid: number;
 }
 
 export class SpecificGeneResults {
@@ -51,20 +37,20 @@ export class SpecificGeneResults {
   number_treated_hits: number;
 
   @IsDefined()
-  data
+  data;
 
   @IsDefined()
-  data_card
+  data_card;
 
   @IsDefined()
-  tag
+  tag;
 
   @IsDefined()
-  size
+  size;
 
   @IsDefined()
-  fasta_metadata
+  fasta_metadata;
 
   @IsDefined()
-  gene
+  gene;
 }
