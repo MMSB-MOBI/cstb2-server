@@ -15,11 +15,11 @@
 # pid=70
 
 export PATH=$PATH:/data1/cecile/app/crispr-set/
-source /data1/cecile/python_venv/crispr/bin/activate
-CRISPR_TOOLS_SCRIPT_PATH=/data1/cecile/python_venv/crispr/CSTB/bin
-export PYTHONPATH=/data1/cecile/python_venv/crispr/CSTB/lib
+source /data1/cecile/python_venv/cstb/bin/activate
+CRISPR_TOOLS_SCRIPT_PATH=/data1/cecile/python_venv/cstb/CSTB/bin
+export PYTHONPATH=/data1/cecile/python_venv/cstb/CSTB/lib
 source /home/chilpert/miniconda3/etc/profile.d/conda.sh
-conda activate blast
+conda activate new_blast
 
 run_index_sequence() {
     queryFasta="query.fasta"
