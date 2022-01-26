@@ -35,6 +35,7 @@ export class ComputeAllService extends ComputeBaseService {
       console.log('Validation failed: ', errors);
       // raise error to client
     }
+
     return results;
   }
 }

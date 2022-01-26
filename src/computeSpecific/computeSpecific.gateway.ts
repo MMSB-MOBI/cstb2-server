@@ -15,6 +15,8 @@ import { ComputeSpecificService } from './computeSpecific.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { WsExceptionFilter } from '../computeAll/ws-exception.filter';
+import Mailer from '../mailer/Mailer';
+import { ConfigService} from '@nestjs/config';
 
 // // Custom Error class
 // class CustomError extends Error {
@@ -36,6 +38,7 @@ import { WsExceptionFilter } from '../computeAll/ws-exception.filter';
 export class ComputeSpecificGateway {
   constructor(
     private readonly computeSpecificService: ComputeSpecificService,
+    private configService: ConfigService,
   ) {}
 
   @WebSocketServer()
@@ -55,8 +58,21 @@ export class ComputeSpecificGateway {
     console.log(`Query: ${data.seq}`);*/
 
     try {
+      const clientUrl: string = this.configService.get('client.url');
       const results = await this.computeSpecificService.specificGeneCompare(
         data,
+      );
+
+      await Mailer.send(
+        {
+          to: data.email,
+          subject: 'CSTB - Job completed',
+        },
+        'mail_job_completed',
+        {
+          job_id: results.tag,
+          job_url: `${clientUrl}/results/${results.tag}`,
+        },
       );
 
       if ('emptySearch' in results)

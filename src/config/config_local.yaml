@@ -1,13 +1,17 @@
+client:
+  url: "http://localhost:8080"
+
 job-manager:
   address: "localhost"
   port: 6001
   scriptRoot: '/data1/cecile/web_services/CSTB/cstb2-server/scripts'
+  cache : '/data1/cecile/jm_tmp/'
 
 db:
   couchDB:
     connect:
-      user: '#####'
-      password: '#####'
+      user: 'cstb_agent'
+      password: '8n9m4zY2kZtePvP'
       host: 'localhost'
       port: 1234
     
