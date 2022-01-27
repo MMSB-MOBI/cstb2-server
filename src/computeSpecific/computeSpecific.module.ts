@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ManagerModule } from '../manager/manager.module';
+import { ManagerModule } from 'nest-job-manager';
 
 import { ComputeSpecificService } from './computeSpecific.service';
 import { ComputeSpecificGateway } from './computeSpecific.gateway';

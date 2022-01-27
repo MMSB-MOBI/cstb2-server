@@ -71,7 +71,4 @@ export class AllGenomesResults {
 
   @IsDefined()
   fasta_metadata;
-
-  @IsDefined()
-  gene;
 }

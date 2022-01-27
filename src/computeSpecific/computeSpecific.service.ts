@@ -3,7 +3,7 @@ import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
 import { ConfigService } from '@nestjs/config';
-import { ManagerService } from '../manager/manager.service';
+import { ManagerService } from 'nest-job-manager';
 import { ComputeBaseService } from '../computeBase/computeBase.service';
 
 import {

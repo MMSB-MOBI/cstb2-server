@@ -16,7 +16,7 @@ import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { WsExceptionFilter } from '../computeAll/ws-exception.filter';
 import Mailer from '../mailer/Mailer';
-import { ConfigService} from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 // // Custom Error class
 // class CustomError extends Error {

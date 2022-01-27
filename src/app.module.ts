@@ -6,7 +6,7 @@ import { TaxonomyTreeModule } from './taxonomyTree/taxonomyTree.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { DatabaseModule } from './database/database.module';
-import { ManagerModule } from './manager/manager.module';
+import { ManagerModule } from 'nest-job-manager';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 
