@@ -7,13 +7,14 @@ import { ComputeSpecificGateway } from './computeSpecific.gateway';
 import { ComputeBaseService } from '../computeBase/computeBase.service';
 
 @Module({
-    imports: [ManagerModule, ConfigModule],
-    providers: [ComputeSpecificGateway,
-        ComputeSpecificService,
-        {
-            provide: ComputeBaseService,
-            useClass: ComputeSpecificService,
-        }
-    ],
+  imports: [ManagerModule, ConfigModule],
+  providers: [
+    ComputeSpecificGateway,
+    ComputeSpecificService,
+    {
+      provide: ComputeBaseService,
+      useClass: ComputeSpecificService,
+    },
+  ],
 })
-export class ComputeSpecificModule { }
+export class ComputeSpecificModule {}

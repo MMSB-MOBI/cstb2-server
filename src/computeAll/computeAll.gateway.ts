@@ -11,7 +11,7 @@ import { AllGenomesInput, AllGenomesResults } from './dto/computeAll.dto';
 import { ComputeAllService } from './computeAll.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
-import { WsExceptionFilter } from './ws-exception.filter';
+import { BadRequestFilter } from './ws-exception.filter';
 import Mailer from '../mailer/Mailer';
 import { ConfigService } from '@nestjs/config';
 
@@ -42,7 +42,7 @@ export class ComputeAllGateway {
   server: Server;
 
   @UsePipes(new ValidationPipe())
-  @UseFilters(new WsExceptionFilter())
+  @UseFilters(new BadRequestFilter())
   @SubscribeMessage('allGenomesRequest')
   async allGenomesRequest(
     @MessageBody() data: AllGenomesInput,

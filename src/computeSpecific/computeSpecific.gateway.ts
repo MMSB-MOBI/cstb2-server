@@ -14,7 +14,7 @@ import {
 import { ComputeSpecificService } from './computeSpecific.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
-import { WsExceptionFilter } from '../computeAll/ws-exception.filter';
+import { BadRequestFilter } from '../computeAll/ws-exception.filter';
 import Mailer from '../mailer/Mailer';
 import { ConfigService } from '@nestjs/config';
 
@@ -45,7 +45,7 @@ export class ComputeSpecificGateway {
   server: Server;
 
   @UsePipes(new ValidationPipe())
-  @UseFilters(new WsExceptionFilter())
+  @UseFilters(new BadRequestFilter())
   @SubscribeMessage('specificGeneRequest')
   async specificGeneRequest(
     @MessageBody() data: SpecificGeneInput,

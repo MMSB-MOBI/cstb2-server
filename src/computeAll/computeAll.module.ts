@@ -7,13 +7,14 @@ import { ComputeAllGateway } from './computeAll.gateway';
 import { ComputeBaseService } from '../computeBase/computeBase.service';
 
 @Module({
-    imports: [ManagerModule, ConfigModule],
-    providers: [ComputeAllGateway,
-        ComputeAllService,
-        {
-            provide: ComputeBaseService,
-            useClass: ComputeAllService,
-        }
-    ],
+  imports: [ManagerModule, ConfigModule],
+  providers: [
+    ComputeAllGateway,
+    ComputeAllService,
+    {
+      provide: ComputeBaseService,
+      useClass: ComputeAllService,
+    },
+  ],
 })
-export class ComputeAllModule { }
+export class ComputeAllModule {}

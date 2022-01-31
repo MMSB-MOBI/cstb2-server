@@ -22,13 +22,19 @@ export class RestoreGateway {
   @UsePipes(new ValidationPipe())
   @SubscribeMessage('restoreResults')
   async restoreResults(@MessageBody() data: RestoreInput) {
-    const results = await this.restoreService.reloadResults(data.id);
-    if ('emptySearch' in results)
-        return { event: 'emptySearch', data: results['emptySearch'] };
-    if ('error' in results) throw new WsException(results['error']);
-    if ('gene' in results) {
-        return { event: 'specificGeneResults', data: results };
-    } else return { event: 'allGenomesResults', data: results };
-
+    try {
+      const results = await this.restoreService.reloadResults(data.id);
+      if ('emptySearch' in results)
+          return { event: 'emptySearch', data: results['emptySearch'] };
+      if ('error' in results) throw new WsException(results['error']);
+      if ('gene' in results) {
+          return { event: 'specificGeneResults', data: results };
+      } else return { event: 'allGenomesResults', data: results };
+  
+    } catch(e) {
+      console.error(e); 
+      throw new WsException("Can't reload this job.")
+    }
+   
   }
 }
