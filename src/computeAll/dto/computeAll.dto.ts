@@ -9,6 +9,7 @@ import {
   IsNumber,
   Min,
   Max,
+  IsBoolean,
 } from 'class-validator';
 
 import { Type } from 'class-transformer';
@@ -71,4 +72,8 @@ export class AllGenomesResults {
 
   @IsDefined()
   fasta_metadata;
+
+  @IsDefined()
+  @IsBoolean()
+  mail_sended: boolean;
 }

@@ -1,30 +1,49 @@
 import nodemailer from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import Twig from 'twig';
-import path from 'path';
 
-const TEMPLATE_DIR = path.resolve(__dirname, '../../templates/') + '/'
-const SERVER_URL = 'http://localhost:8080';
-const DEFAULT_MAILER_NAME = 'CSTB';
-const DEFAULT_MAILER_ADDRESS = 'cstb@ibcp.fr';
-const MAILER_ENFORCE_RECIPIENT = false; 
-const MAILER_TRANSPORT_SETTINGS = SMTPTransport.Options = {
-  host: 'smtp.ibcp.fr',
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  tls: {
-    // do not fail on invalid certs
-    rejectUnauthorized: false,
-  },
-};
+interface DefaultSenderInterface {
+  name: string;
+  address: string;
+}
 
-export default new class Mailer {
-  protected transporter = nodemailer.createTransport(MAILER_TRANSPORT_SETTINGS);
+class Mailer {
+  mailer_transport_settings: SMTPTransport.Options;
+  default_sender: DefaultSenderInterface;
+  server_url: string;
+  template_dir: string;
+  mailer_enforce_recipient: string;
+  protected transporter: any;
 
-  public default_sender = {
-    name: DEFAULT_MAILER_NAME,
-    address: DEFAULT_MAILER_ADDRESS,
-  };
+  constructor(
+    mailer_transport_settings: any,
+    default_mailer_name: string,
+    default_mailer_address: string,
+    server_url: string,
+    template_dir: string,
+    mailer_enforce_recipient: string,
+  ) {
+    /*const transportSettings2 = (SMTPTransport.Options = {
+      host: mailer_transport_settings.host,
+      port: mailer_transport_settings.port,
+      secure: mailer_transport_settings.secure, // true for 465, false for other ports
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: mailer_transport_settings.tsl.rejectUnauthorized,
+      },
+    });*/
+
+    //console.log("ts2", transportSettings2)
+
+    this.transporter = nodemailer.createTransport(mailer_transport_settings);
+    this.default_sender = {
+      name: default_mailer_name,
+      address: default_mailer_address,
+    };
+    this.server_url = server_url;
+    this.template_dir = template_dir;
+    this.mailer_enforce_recipient = mailer_enforce_recipient;
+  }
 
   async send(
     send_options: nodemailer.SendMailOptions,
@@ -36,19 +55,18 @@ export default new class Mailer {
     }
 
     if (!options.site_url) {
-      options.site_url = SERVER_URL;
+      options.site_url = this.server_url;
     }
     if (!options.static_site_url) {
-      options.static_site_url = SERVER_URL;
+      options.static_site_url = this.server_url;
     }
 
     const file =
-      TEMPLATE_DIR +
+      this.template_dir +
       template_name +
       (template_name.endsWith('.twig') ? '' : '.twig');
 
     const content = (await new Promise((resolve, reject) => {
-      // @ts-ignore Incorrect typedef for options
       Twig.renderFile(file, options, (err: Error, res: string) => {
         if (err) {
           reject(err);
@@ -67,8 +85,8 @@ export default new class Mailer {
       send_options.subject = options.title;
     }
 
-    if (MAILER_ENFORCE_RECIPIENT) {
-      send_options.to = MAILER_ENFORCE_RECIPIENT;
+    if (this.mailer_enforce_recipient) {
+      send_options.to = this.mailer_enforce_recipient;
     }
 
     return this.mail(send_options);
@@ -88,4 +106,22 @@ export default new class Mailer {
       throw new Error('Unable to send email.');
     }
   }
-}();
+}
+
+export function mailerFactory(
+  mailer_transport_settings: SMTPTransport.Options,
+  default_mailer_name: string,
+  default_mailer_address: string,
+  server_url: string,
+  template_dir: string,
+  mailer_enforce_recipient = '',
+) {
+  return new Mailer(
+    mailer_transport_settings,
+    default_mailer_name,
+    default_mailer_address,
+    server_url,
+    template_dir,
+    mailer_enforce_recipient,
+  );
+}

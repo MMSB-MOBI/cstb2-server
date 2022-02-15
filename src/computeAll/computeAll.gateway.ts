@@ -12,7 +12,7 @@ import { ComputeAllService } from './computeAll.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { BadRequestFilter } from './ws-exception.filter';
-import Mailer from '../mailer/Mailer';
+import { mailerFactory } from '../mailer/Mailer';
 import { ConfigService } from '@nestjs/config';
 
 // // Custom Error class
@@ -58,24 +58,44 @@ export class ComputeAllGateway {
       const results: AllGenomesResults = await this.computeAllService.allGenomesCompare(
         data,
       );
+      let mailSended = true;
+      try {
+        const Mailer = mailerFactory(
+          this.configService.get('mail.mailerTransportSettings'),
+          this.configService.get('mail.defaultMailerName'),
+          this.configService.get('mail.defaultMailerAddress'),
+          clientUrl,
+          this.configService.get('mail.templateDir'),
+          this.configService.get('mail.mailerEnforceRecipient'),
+        );
 
-      await Mailer.send(
-        {
-          to: data.email,
-          subject: 'CSTB - Job completed',
-        },
-        'mail_job_completed',
-        {
-          job_id: results.tag,
-          job_url: `${clientUrl}/results/${results.tag}`,
-        },
-      );
+        await Mailer.send(
+          {
+            to: data.email,
+            subject: 'CSTB - Job completed',
+          },
+          'mail_job_completed',
+          {
+            job_id: results.tag,
+            job_url: `${clientUrl}/results/${results.tag}`,
+          },
+        );
+      } catch (e) {
+        console.error('#Mail error', e);
+        mailSended = false;
+      }
 
       if ('emptySearch' in results)
-        return { event: 'emptySearch', data: results['emptySearch'] };
+        return {
+          event: 'emptySearch',
+          data: results['emptySearch'],
+        };
       if ('error' in results) throw new WsException(results['error']);
 
-      return { event: 'allGenomesResults', data: results };
+      return {
+        event: 'allGenomesResults',
+        data: { ...results, ...{ mail_sended: mailSended } },
+      };
     } catch (e) {
       console.log('#Error', e);
       throw new WsException(e);

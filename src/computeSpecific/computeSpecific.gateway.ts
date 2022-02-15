@@ -15,7 +15,7 @@ import { ComputeSpecificService } from './computeSpecific.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { BadRequestFilter } from '../computeAll/ws-exception.filter';
-import Mailer from '../mailer/Mailer';
+import { mailerFactory } from '../mailer/Mailer';
 import { ConfigService } from '@nestjs/config';
 
 // // Custom Error class
@@ -61,6 +61,15 @@ export class ComputeSpecificGateway {
       const clientUrl: string = this.configService.get('client.url');
       const results = await this.computeSpecificService.specificGeneCompare(
         data,
+      );
+
+      const Mailer = mailerFactory(
+        this.configService.get('mail.mailerTransportSettings'),
+        this.configService.get('mail.defaultMailerName'),
+        this.configService.get('mail.defaultMailerAddress'),
+        this.configService.get('client.url'),
+        this.configService.get('mail.templateDir'),
+        this.configService.get('mail.mailerEnforceRecipient'),
       );
 
       await Mailer.send(
