@@ -9,7 +9,7 @@ import {
 import { Server } from 'socket.io';
 import { RestoreService } from './restore.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
-import { RestoreInput } from './restore.dto'
+import { JobIdInterrogate } from '../sharedDto/shared.dto'
 
 
 @WebSocketGateway()
@@ -21,7 +21,7 @@ export class RestoreGateway {
 
   @UsePipes(new ValidationPipe())
   @SubscribeMessage('restoreResults')
-  async restoreResults(@MessageBody() data: RestoreInput) {
+  async restoreResults(@MessageBody() data: JobIdInterrogate) {
     try {
       const results = await this.restoreService.reloadResults(data.id);
       if ('emptySearch' in results)
@@ -37,4 +37,5 @@ export class RestoreGateway {
     }
    
   }
+
 }
