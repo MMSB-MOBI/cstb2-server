@@ -2,23 +2,15 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
-// import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  // const config = new DocumentBuilder()
-  //   .setTitle('Cats example')
-  //   .setDescription('The cats API description')
-  //   .setVersion('1.0')
-  //   .addTag('cats')
-  //   .build();
-  // const document = SwaggerModule.createDocument(app, config);
-  // SwaggerModule.setup('api', app, document);
-
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const configService: ConfigService = app.get<ConfigService>(ConfigService);
+  const port = configService.get('app.port');
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
-  // app.get()
-  await app.listen(4000);
+  await app.listen(port);
 }
 bootstrap();
