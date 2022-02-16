@@ -1,12 +1,12 @@
 app: 
-  port: 4000
+  port: 0000
 
 client:
   url: "http://localhost:8080"
 
 job-manager:
   address: "localhost"
-  port: 6001
+  port: 0000
   scriptRoot: '/data1/cecile/web_services/CSTB/cstb2-server/scripts'
   cache : '/data1/cecile/jm_tmp/'
 
@@ -14,9 +14,9 @@ db:
   couchDB:
     connect:
       user: 'user'
-      password: 'password'
+      password: 'pwd'
       host: 'localhost'
-      port: 1234
+      port: 0000
     
     maxi_tree:
       doc: 'maxi_tree'
@@ -28,7 +28,7 @@ db:
 
   motif-broker:
     host: 'localhost'
-    port: 6003
+    port: 0000
 
 allGenomes:
   exportVar:
