@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@mmsb/nodemailer-wrapper": "^1.0.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^1.0.0",
     "@nestjs/core": "^7.6.15",
@@ -34,12 +35,10 @@
     "js-yaml": "^4.1.0",
     "nano": "^9.0.3",
     "nest-job-manager": "^1.0.0",
-    "nodemailer": "^6.7.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
-    "swagger-ui-express": "^4.1.6",
-    "twig": "^1.15.4"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

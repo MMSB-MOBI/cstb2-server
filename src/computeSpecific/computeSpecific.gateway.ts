@@ -15,7 +15,7 @@ import { ComputeSpecificService } from './computeSpecific.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { BadRequestFilter } from '../computeAll/ws-exception.filter';
-import { mailerFactory } from '../mailer/Mailer';
+import { mailerFactory } from '@mmsb/nodemailer-wrapper';
 import { ConfigService } from '@nestjs/config';
 
 // // Custom Error class

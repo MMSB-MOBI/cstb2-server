@@ -72,8 +72,4 @@ export class AllGenomesResults {
 
   @IsDefined()
   fasta_metadata;
-
-  @IsDefined()
-  @IsBoolean()
-  mail_sended: boolean;
 }

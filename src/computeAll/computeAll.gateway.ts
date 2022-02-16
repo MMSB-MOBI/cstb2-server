@@ -12,7 +12,7 @@ import { ComputeAllService } from './computeAll.service';
 import { UsePipes, ValidationPipe } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { BadRequestFilter } from './ws-exception.filter';
-import { mailerFactory } from '../mailer/Mailer';
+import { mailerFactory } from '@mmsb/nodemailer-wrapper';
 import { ConfigService } from '@nestjs/config';
 
 // // Custom Error class
@@ -91,7 +91,8 @@ export class ComputeAllGateway {
           data: results['emptySearch'],
         };
       if ('error' in results) throw new WsException(results['error']);
-
+      
+      console.log("mailSended", mailSended);
       return {
         event: 'allGenomesResults',
         data: { ...results, ...{ mail_sended: mailSended } },
