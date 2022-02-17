@@ -23,7 +23,12 @@ conda activate new_blast
 
 run_index_sequence() {
     queryFasta="query.fasta"
-    printf ">query\n$seq\n" > $queryFasta
+    if [[ $seq == \>* ]]; then 
+        printf "$seq\n" > $queryFasta
+    else
+        printf ">query\n$seq\n" > $queryFasta
+    fi 
+    
     queryIndex="query.index"
     echo python -u $CRISPR_TOOLS_SCRIPT_PATH/index_sequence.py -f $queryFasta -o $queryIndex > index_query.cmd
     python -u $CRISPR_TOOLS_SCRIPT_PATH/index_sequence.py -f $queryFasta -o $queryIndex 1> index_query.out 2> index_query.err
