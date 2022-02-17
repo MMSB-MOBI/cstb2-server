@@ -28,8 +28,8 @@ export class RestoreGateway {
           return { event: 'emptySearch', data: results['emptySearch'] };
       if ('error' in results) throw new WsException(results['error']);
       if ('gene' in results) {
-          return { event: 'specificGeneResults', data: results };
-      } else return { event: 'allGenomesResults', data: results };
+          return { event: 'specificGeneResults', data: {...results, mail_sended: true} };
+      } else return { event: 'allGenomesResults', data: {...results, mail_sended: true} };
   
     } catch(e) {
       console.error(e); 
