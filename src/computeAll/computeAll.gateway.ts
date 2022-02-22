@@ -14,6 +14,7 @@ import { UseFilters } from '@nestjs/common';
 import { BadRequestFilter } from './ws-exception.filter';
 import { mailerFactory } from '@mmsb/nodemailer-wrapper';
 import { ConfigService } from '@nestjs/config';
+import { TWIG_TEMPLATE } from 'src/config/configuration';
 
 // // Custom Error class
 // class CustomError extends Error {
@@ -65,7 +66,7 @@ export class ComputeAllGateway {
           this.configService.get('mail.defaultMailerName'),
           this.configService.get('mail.defaultMailerAddress'),
           clientUrl,
-          this.configService.get('mail.templateDir'),
+          TWIG_TEMPLATE,
           this.configService.get('mail.mailerEnforceRecipient'),
         );
 
