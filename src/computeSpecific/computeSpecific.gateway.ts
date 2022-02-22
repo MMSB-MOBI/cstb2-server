@@ -64,39 +64,46 @@ export class ComputeSpecificGateway {
         data,
       );
 
-      const Mailer = mailerFactory(
-        this.configService.get('mail.mailerTransportSettings'),
-        this.configService.get('mail.defaultMailerName'),
-        this.configService.get('mail.defaultMailerAddress'),
-        this.configService.get('client.url'),
-        TWIG_TEMPLATE,
-        this.configService.get('mail.mailerEnforceRecipient'),
-      );
+      let mailSended = true;
+      try {
+        const Mailer = mailerFactory(
+          this.configService.get('mail.mailerTransportSettings'),
+          this.configService.get('mail.defaultMailerName'),
+          this.configService.get('mail.defaultMailerAddress'),
+          this.configService.get('client.url'),
+          TWIG_TEMPLATE,
+          this.configService.get('mail.mailerEnforceRecipient'),
+        );
 
-      await Mailer.send(
-        {
-          to: data.email,
-          subject: 'CSTB - Job completed',
-        },
-        'mail_job_completed',
-        {
-          job_id: results.tag,
-          job_url: `${clientUrl}/results/${results.tag}`,
-        },
-      );
+        await Mailer.send(
+          {
+            to: data.email,
+            subject: 'CSTB - Job completed',
+          },
+          'mail_job_completed',
+          {
+            job_id: results.tag,
+            job_url: `${clientUrl}/results/${results.tag}`,
+          },
+        );
+      } catch (e) {
+        console.error('#Mail error', e);
+        mailSended = false;
+      }
 
       if ('emptySearch' in results)
-        return { event: 'emptySearch', data: results['emptySearch'] };
+        return {
+          event: 'emptySearch',
+          data: results['emptySearch'],
+        };
       if ('error' in results) throw new WsException(results['error']);
-      return { event: 'specificGeneResults', data: results };
+      return {
+        event: 'specificGeneResults',
+        data: { ...results, ...{ mail_sended: mailSended } },
+      };
     } catch (e) {
-      console.log('Err', e);
-      try {
-        throw new WsException(e);
-        // throw new CustomError(e);
-      } catch (e) {
-        console.error(e);
-      }
+      console.log('#Error', e);
+      throw new WsException(e);
     }
   }
 }
