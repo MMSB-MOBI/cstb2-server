@@ -3,10 +3,17 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const keyFile = fs.readFileSync('/certs/cstb-dev_ibcp_fr.key');
+  const certFile = fs.readFileSync('/certs/cstb-dev_ibcp_fr_full.pem');
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions: {
+      key: keyFile,
+      cert: certFile,
+    },
+  });
   const configService: ConfigService = app.get<ConfigService>(ConfigService);
   const port = configService.get('app.port');
   app.enableCors();
