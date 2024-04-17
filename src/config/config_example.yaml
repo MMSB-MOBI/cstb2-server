@@ -1,0 +1,58 @@
+app: 
+  port: 0000
+
+client:
+  url: "http://localhost:8080"
+
+job-manager:
+  address: "localhost"
+  port: 0000
+  scriptRoot: '/data1/cecile/web_services/CSTB/cstb2-server/scripts'
+  cache : '/data1/cecile/jm_tmp/'
+
+db:
+  couchDB:
+    connect:
+      user: 'user'
+      password: 'pwd'
+      host: 'localhost'
+      port: 0000
+    
+    maxi_tree:
+      doc: 'maxi_tree'
+      database: 'rc03_tree'
+    taxon:
+      name: 'rc03_taxon'
+    genome:
+      name: 'rc03_genome'
+
+  motif-broker:
+    host: 'localhost'
+    port: 0000
+
+allGenomes:
+  exportVar:
+    rfg: 'index_path'
+  
+  script: "crispr_workflow_local.sh"
+
+specificGene: 
+  exportVar: 
+    rfg: 'index_path'
+    blastdb: 'blast_path'
+  script: "crispr_workflow_specific_local.sh"
+
+
+mail: 
+  defaultMailerName : "CSTB"
+  defaultMailerAddress : "cstb@ibcp.fr"
+  mailerEnforceRecipient: ""
+  templateDir: "templates/"
+  mailerTransportSettings: 
+    host: 'smtp.example.fr'
+    port: 587
+    secure: false
+    tls : 
+      rejectUnauthorized: false
+  
+

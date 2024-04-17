@@ -1,16 +1,20 @@
 import {
-    MessageBody,
-    SubscribeMessage,
-    WebSocketGateway,
-    WebSocketServer,
-    WsResponse,
-    WsException
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
+  WsException,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { AllGenomesInput, AllGenomesResults } from './dto/computeAll.dto';
-import { ComputeAllService } from "./computeAll.service";
-import { UsePipes, ValidationPipe } from '@nestjs/common'
-import { UseFilters, WsExceptionFilter } from '@nestjs/common';
+import { ComputeAllService } from './computeAll.service';
+import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
+import { BadRequestFilter } from './ws-exception.filter';
+import { mailerFactory } from '@mmsb/nodemailer-wrapper';
+import { ConfigService } from '@nestjs/config';
+import { TWIG_TEMPLATE } from 'src/config/configuration';
 
 // // Custom Error class
 // class CustomError extends Error {
@@ -30,34 +34,73 @@ import { UseFilters, WsExceptionFilter } from '@nestjs/common';
 
 @WebSocketGateway()
 export class ComputeAllGateway {
-    constructor(private readonly computeAllService: ComputeAllService) { }
+  constructor(
+    private readonly computeAllService: ComputeAllService,
+    private configService: ConfigService,
+  ) {}
 
-    @WebSocketServer()
-    server: Server;
+  @WebSocketServer()
+  server: Server;
 
-    @UsePipes(new ValidationPipe())
-    @UseFilters(/* new WsExceptionFilter() */)
-    @SubscribeMessage('allGenomesRequest')
-    async allGenomesRequest(@MessageBody() data: AllGenomesInput): Promise<WsResponse<AllGenomesResults>> {
-        console.log('Socket: submitAllGenomes', data);
-        console.log(`Included genomes:\n${data.gi}`);
-        if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
-        console.log(`${data.pam}`);
-        console.log(`Length of motif: ${data.sgrna_length}`);
+  @UsePipes(new ValidationPipe())
+  @UseFilters(new BadRequestFilter())
+  @SubscribeMessage('allGenomesRequest')
+  async allGenomesRequest(
+    @MessageBody() data: AllGenomesInput,
+  ): Promise<WsResponse<any>> {
+    console.log('Socket: submitAllGenomes', data);
+    console.log(`Included genomes:\n${data.gi}`);
+    if (data.gni.length > 0) console.log(`Excluded genomes:\n${data.gni}`);
+    console.log(`${data.pam}`);
+    console.log(`Length of motif: ${data.sgrna_length}`);
 
-        try {
-            const results: AllGenomesResults = await this.computeAllService.allGenomesCompare(data);
-            console.log("Returning allGenomesRequest");
-            console.log(results);
-            return { event: 'allGenomesResults', data: results };
-        } catch (e) {
-            console.log("Error", e);
-            try {
-                throw new WsException(e);
-                // throw new CustomError(e);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+    try {
+      const clientUrl: string = this.configService.get('client.url');
+      const results: AllGenomesResults = await this.computeAllService.allGenomesCompare(
+        data,
+      );
+      let mailSended = true;
+      try {
+        const Mailer = mailerFactory(
+          this.configService.get('mail.mailerTransportSettings'),
+          this.configService.get('mail.defaultMailerName'),
+          this.configService.get('mail.defaultMailerAddress'),
+          clientUrl,
+          TWIG_TEMPLATE,
+          this.configService.get('mail.mailerEnforceRecipient'),
+        );
+
+        await Mailer.send(
+          {
+            to: data.email,
+            subject: 'CSTB - Job completed',
+          },
+          'mail_job_completed',
+          {
+            job_id: results.tag,
+            job_url: `${clientUrl}/results/${results.tag}`,
+          },
+        );
+      } catch (e) {
+        console.error('#Mail error', e);
+        mailSended = false;
+      }
+
+      if ('emptySearch' in results)
+        return {
+          event: 'emptySearch',
+          data: results['emptySearch'],
+        };
+      if ('error' in results) throw new WsException(results['error']);
+      
+      console.log("mailSended", mailSended);
+      return {
+        event: 'allGenomesResults',
+        data: { ...results, ...{ mail_sended: mailSended } },
+      };
+    } catch (e) {
+      console.log('#Error', e);
+      throw new WsException(e);
     }
+  }
 }

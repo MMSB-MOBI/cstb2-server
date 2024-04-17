@@ -1,29 +1,47 @@
-import { IsDefined, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsDefined,
+  ArrayNotEmpty,
+  IsString,
+  IsIn,
+  IsAlphanumeric,
+  IsEmail,
+  IsNumber,
+  Min,
+  Max,
+  IsBoolean,
+} from 'class-validator';
+
+import { Type } from 'class-transformer';
+
+import { PAM, AvailablePAM } from '../../computeBase/types';
 
 export class AllGenomesInput {
-  @MinLength(1, {
-    each: true,
-  })
-  gi: string[];
+  @IsArray()
+  @IsDefined()
+  @ArrayNotEmpty()
+  @IsAlphanumeric(undefined, { each: true })
+  gi!: string[];
 
-  @MinLength(1, {
-    each: true,
-  })
-  gni: string[];
+  @IsArray()
+  @IsDefined()
+  @IsAlphanumeric(undefined, { each: true })
+  gni!: string[];
 
-  @MinLength(1, {
-    each: true,
-  })
-  pam: string;
+  @IsString()
+  @IsDefined()
+  @IsIn(PAM)
+  pam: AvailablePAM;
 
-  @MinLength(1, {
-    each: true,
-  })
+  @IsNumber()
+  @IsDefined()
+  @Type(() => Number)
+  @Min(15)
+  @Max(20)
   sgrna_length: string;
 
-  @MinLength(1, {
-    each: true,
-  })
+  @IsEmail()
+  @IsDefined()
   email: string;
 }
 
@@ -41,20 +59,17 @@ export class AllGenomesResults {
   number_treated_hits: number;
 
   @IsDefined()
-  data
+  data;
 
   @IsDefined()
-  data_card
+  data_card;
 
   @IsDefined()
-  tag
+  tag;
 
   @IsDefined()
-  size
+  size;
 
   @IsDefined()
-  fasta_metadata
-
-  @IsDefined()
-  gene
+  fasta_metadata;
 }
